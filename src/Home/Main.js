@@ -42,6 +42,8 @@ import InterChat from "./InterChat";
 import fire from "../fire";
 import TiketTodos from './../SeccionTiketes/TiketsTodos';
 import TiketPropios from './../SeccionTiketes/TiketsPropios';
+import Banner from "../Catalogo/SeccionBanner/Banners";
+import Maquinas from "../Catalogo/SeccionMaquinas/Maquinas";
 
 const drawerWidth = 240;
 
@@ -475,7 +477,8 @@ const Main = (props) => {
                     </ListItem>
                   </Link>
 
-                  <Link to="/" className={classes.link}>
+                  {/* LINK DE REFERENCIA A  MAQUINAS  */}
+                  <Link to="/maquinas" className={classes.link}>
                     <ListItem button>
                       <Box sx={{ marginLeft: 7 }}>
                         <ListItemText sx={{ color: "#ffffff" }}>
@@ -484,8 +487,8 @@ const Main = (props) => {
                       </Box>
                     </ListItem>
                   </Link>
-
-                  <Link to="/" className={classes.link}>
+                  {/* LINK DE REFERENCIA A BANNER */}
+                  <Link to="/banners" className={classes.link}>
                     <ListItem button>
                       <Box sx={{ marginLeft: 7 }}>
                         <ListItemText sx={{ color: "#ffffff" }}>
@@ -494,6 +497,9 @@ const Main = (props) => {
                       </Box>
                     </ListItem>
                   </Link>
+
+                  
+
                 </List>
               </Collapse>
             </Drawer>
@@ -538,6 +544,18 @@ const Main = (props) => {
                 <Route exact path="/tiketspropios">
                   <Container maxWidth={false} padding={0}>
                     <TiketPropios />
+                  </Container>
+                </Route>
+                {/* RUTA DE MAQUINAS */}
+                <Route exact path="/banners">
+                  <Container maxWidth={false} padding={0}>
+                    <h1>asd</h1>
+                  </Container>
+                </Route>
+                {/* RUTA DE BANNER */}
+                <Route exact path="/banners">
+                  <Container maxWidth={false} padding={0}>
+                    <Banner></Banner>
                   </Container>
                 </Route>
               </Switch>
