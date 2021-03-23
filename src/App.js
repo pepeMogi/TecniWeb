@@ -143,7 +143,7 @@ const App = () => {
 
   return (
     <div>
-      {user ? ( <Main salirLoging={salirLoging} user={user} />): (
+      {true ? ( <Main salirLoging={salirLoging} user={user} />): (
         <Loginf
           email={email}
           setEmail={setEmail}

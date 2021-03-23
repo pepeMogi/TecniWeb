@@ -40,10 +40,11 @@ import TecnicosMain from "./../Tecnicos/TecnicosMain";
 import TiketsNuevos from "./../SeccionTiketes/TiketsNuevos";
 import InterChat from "./InterChat";
 import fire from "../fire";
-import TiketTodos from './../SeccionTiketes/TiketsTodos';
-import TiketPropios from './../SeccionTiketes/TiketsPropios';
+import TiketTodos from "./../SeccionTiketes/TiketsTodos";
+import TiketPropios from "./../SeccionTiketes/TiketsPropios";
 import Banner from "../Catalogo/SeccionBanner/Banners";
 import Maquinas from "../Catalogo/SeccionMaquinas/Maquinas";
+import TiketsLegalizar from "../SeccionLegalizar/TiketsLegalizar";
 
 const drawerWidth = 240;
 
@@ -156,6 +157,7 @@ const Main = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [openComer, setOpenComer] = useState(false);
+  const [openLegalizar, setOpenLegalizar] = useState(false);
   const [openTikets, setOpenTikets] = useState(false);
   const [openTecnicos, setOpenTecnicos] = useState(false);
   const [openSub, setOpenSub] = useState(false);
@@ -163,7 +165,7 @@ const Main = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [abrirChat, setAbrirChat] = useState(false);
   const [admin, setAdmin] = useState("");
-  const [id,setId] = useState("");
+  const [id, setId] = useState("");
   const [avatar, setAvatar] = useState("");
 
   const isMenuOpen = Boolean(anchorEl);
@@ -183,6 +185,11 @@ const Main = (props) => {
   const handleClickComer = () => {
     setOpenComer(!openComer);
   };
+
+  const handleClickLegalizar = () => {
+    setOpenLegalizar(!openLegalizar);
+  };
+
 
   const handleClickDos = () => {
     setOpenDos(!openDos);
@@ -497,9 +504,30 @@ const Main = (props) => {
                       </Box>
                     </ListItem>
                   </Link>
+                </List>
+              </Collapse>
 
-                  
+              <Link className={classes.link}>
+                <ListItem button onClick={handleClickLegalizar}>
+                  <ListItemIcon>
+                    <IcComer />
+                  </ListItemIcon>
+                  <ListItemText primary="LEGALIZACION" />
+                  {openLegalizar ? <IcArriba /> : <IcAbajo />}
+                </ListItem>
+              </Link>
 
+              <Collapse in={openLegalizar} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <Link to="/legalizar" className={classes.link}>
+                    <ListItem button>
+                      <Box sx={{ marginLeft: 7 }}>
+                        <ListItemText sx={{ color: "#ffffff" }}>
+                          Tikets para legalizar
+                        </ListItemText>
+                      </Box>
+                    </ListItem>
+                  </Link>
                 </List>
               </Collapse>
             </Drawer>
@@ -520,7 +548,7 @@ const Main = (props) => {
                   <Container maxWidth={false} padding={0}>
                     <CargaLaboral />
                   </Container>
-                </Route>                
+                </Route>
                 <Route exact path="/historialtrabajo">
                   <Container maxWidth={false} padding={0}>
                     <HistorialTrabajof />
@@ -546,16 +574,18 @@ const Main = (props) => {
                     <TiketPropios />
                   </Container>
                 </Route>
-                {/* RUTA DE MAQUINAS */}
-                <Route exact path="/banners">
-                  <Container maxWidth={false} padding={0}>
-                    <h1>asd</h1>
-                  </Container>
-                </Route>
+               
                 {/* RUTA DE BANNER */}
                 <Route exact path="/banners">
                   <Container maxWidth={false} padding={0}>
                     <Banner></Banner>
+                  </Container>
+                </Route>
+
+                  {/* RUTA DE LEGALIZAR */}
+                  <Route exact path="/legalizar">
+                  <Container maxWidth={false} padding={0}>
+                    <TiketsLegalizar/>
                   </Container>
                 </Route>
               </Switch>
