@@ -6,15 +6,20 @@ import fire from "../../fire";
 // IMPORTACION DE ICONOS
 import Iconobanner from "../../Iconos/iconoagregarbanner";
 // IMPORTACION DE ELEMENTOS
-import {Button, Typography, Box, Grid, Card, CardMedia,CardContent } from '@material-ui/core/';
+import {Button, Typography, Box, Grid, Card, CardMedia,CardContent,Alert } from '@material-ui/core/';
+//IMPORTACION DE DIALOG FORMBANNER
+import Formbanner  from "./Formbanner";
 
 
 const useStyles = makeStyles((theme) => ({
   root: {},
 }));
+
+
 const Bannner = () => {
     const classes = useStyles();
     const [banner, setBanner] = useState([]);
+
 
     const Bannerlista = (props) => {
         const {ban}=props
@@ -67,7 +72,6 @@ const Bannner = () => {
                 id: ban.data().id,
                 nombre: ban.data().nombre,
                 img: ban.data().img,
-               
               };
     
               setBanner((array) => array.concat(banner));
@@ -78,6 +82,21 @@ const Bannner = () => {
           });
       }, []);
 
+
+    const abrirform = () => {
+        
+        
+        return(
+            <div>
+
+                {console.log('Form Banner')}
+                <Alert severity="info">This is an info alert — check it out!</Alert>
+                <Formbanner></Formbanner>
+            </div>
+        );
+    }
+    
+
     return (
         // CONTENEDOR PRINCIPAL DE LOS BANNERS
         <Grid container >
@@ -85,7 +104,8 @@ const Bannner = () => {
             {/* CONTENEDOR FILA DEL BOTON AGREGAR BANER CON TAMAÑO DE 3VH */}
             <Grid container>
                 <Grid item xs={3} my={0} > 
-                    <Button variant="contained" fullWidth startIcon={<Iconobanner />} m={0} 
+                    <Button variant="contained" fullWidth startIcon={<Iconobanner/>} m={0} onClick={abrirform}
+                            
                         sx={{
                             fontSize: "15px",
                             bgcolor: "rgb(236,27,59)", 
@@ -115,7 +135,6 @@ const Bannner = () => {
                 // justifyContent: 'center',
             }}
             >
-
                 {banner.map((ban) => {
                     return <Bannerlista ban={ban}/>;
                 })}

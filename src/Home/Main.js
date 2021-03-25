@@ -512,7 +512,7 @@ const Main = (props) => {
                   <ListItemIcon>
                     <IcComer />
                   </ListItemIcon>
-                  <ListItemText primary="LEGALIZACION" />
+                  <ListItemText primary="LEGALIZACIÓN" />
                   {openLegalizar ? <IcArriba /> : <IcAbajo />}
                 </ListItem>
               </Link>
@@ -530,6 +530,7 @@ const Main = (props) => {
                   </Link>
                 </List>
               </Collapse>
+              
             </Drawer>
 
             <main
@@ -571,7 +572,7 @@ const Main = (props) => {
                 </Route>
                 <Route exact path="/tiketspropios">
                   <Container maxWidth={false} padding={0}>
-                    <TiketPropios />
+                    <TiketPropios/>
                   </Container>
                 </Route>
                
@@ -581,12 +582,20 @@ const Main = (props) => {
                     <Banner></Banner>
                   </Container>
                 </Route>
+                {/* RUTA DE MAQUINAS */}
+                <Route exact path="/maquinas">
+                  <Container maxWidth={false} padding={0}>
+                    <Maquinas></Maquinas>
+                  </Container>
+                </Route>
+                
 
                   {/* RUTA DE LEGALIZAR */}
                   <Route exact path="/legalizar">
                   <Container maxWidth={false} padding={0}>
                     <TiketsLegalizar/>
                   </Container>
+                  
                 </Route>
               </Switch>
               <Fab style={fabStyle}>Hola</Fab>

@@ -23,37 +23,70 @@ const Maquinas = () => {
             {/* BANNERLISTA PRESENTADOS EN FORMA DE CARD */}
             <Card 
             sx={{
-                width:"300px",        
-                background: 'transparent',
+                width:"280px",        
+                background: 'white',
                 my: "20px",
                 ml: "40px"
-
+                
             }}
             >
-                <CardHeader
-                    title="Multifuncional CAnon 2021"
-                    subheader="Referencia"
+                <CardHeader 
+                    title="Multifuncional Canon"
+                    sx={{
+                        margin:"2"
+                    }}
                 />
                 {/* IMAGEN CON TAMAÑO DEFINIDO */}
-                <CardMedia
-                    component="img"
-                    height= "200px"
-                    alt="Banner"
-                    image="https://topesdegama.com/app/uploads-topesdegama.com/2020/04/impresoras.jpg"
-                    title="Banner"
-                />
-                {/* CONTENIDO DEL TEXTO */}
-                <CardContent 
-                    sx={{
-                        padding: "0px !important",
-                    }}
-                >
-                    <Typography  variant="subtitle1" fontWeight="fontWeightBold" pl={1}>
-                      Descripcion
-                    </Typography>
-                </CardContent>
+                <Box px={2}>
+                    <CardMedia
+                        component="img"
+                        height= "200px"
+                        alt="Banner"
+                        image="https://topesdegama.com/app/uploads-topesdegama.com/2020/04/impresoras.jpg"
+                        title="Banner"
+                        padding="2"
+                        sx={{
+                            borderRadius: "5px",
+                        }}
+                    />
                 
-                </Card>
+                    {/* CONTENIDO DEL TEXTO */}
+                    <CardContent 
+                        sx={{
+                            padding: "0px !important",   
+                        }}
+                    >
+                        
+                        <Box>
+                            <Grid container py={2}>
+                                <Grid items xs={6} >
+                                    <Typography  variant="subtitle1" fontWeight="fontWeightBold">
+                                    Referencia: 
+                                    </Typography>
+                                </Grid>
+                                <Grid items xs={6} >
+                                    <Typography  variant="subtitle1">
+                                    Contenido 
+                                    </Typography>
+                                </Grid>
+                                <Grid items xs={6}>
+                                    <Typography  variant="subtitle1" fontWeight="fontWeightBold">
+                                    Descripcion: 
+                                    </Typography>
+                                </Grid>
+                                <Grid items xs={6}>
+                                    <Typography  variant="subtitle1" >
+                                    contenido
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            
+                            
+                        </Box>
+                        
+                    </CardContent>
+                </Box>
+            </Card>
         </>
         );
     }
@@ -116,15 +149,16 @@ const Maquinas = () => {
             <Grid container 
             sx={{
                 display: 'flex',
-                // justifyContent: 'center',
             }}
             >
-
-                {/* {banner.map((ban) => {
-                    return <Maquinaslista ban={ban}/>;
-                })} */}
-                 <Maquinaslista/>
-               
+                <Maquinaslista/>
+                <Maquinaslista/>
+                <Maquinaslista/>
+                <Maquinaslista/>
+                <Maquinaslista/>
+                <Maquinaslista/>
+                <Maquinaslista/>
+                <Maquinaslista/>
             </Grid>
         </Grid>
             

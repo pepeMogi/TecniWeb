@@ -86,3 +86,6 @@ const TiketsLegalizar = () => {
 };
 
 export default TiketsLegalizar;
+
+
+
