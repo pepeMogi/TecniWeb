@@ -474,177 +474,129 @@ const TikestPropios = (props) => {
 
   return (
     <div>
-      <Grid container direction="column" justifyContent="flex-start" pt={3}>
+      <Grid container 
+      direction="column" justifyContent="flex-start">
         {/* FILA ROJA TAMAÑO 9 */}
-        <Grid item>
-          <Box
+
+        <Box
+          sx={{
+            bgcolor: "#EC1B3B",
+            borderRadius: 2,
+            padding: 1,
+            boxShadow: 5,
+          }}
+        >
+          {/* COLUMNAS DENTRO DE LA FILA PARA POSICIONAR LOS ICONOS Y TEXTOS */}
+          <Grid
             container
-            sx={{
-              bgcolor: "#EC1B3B",
-              borderRadius: 2,
-              padding: 1,
-              boxShadow: 5,
-            }}
+            direction="row"
+            justify="flex-start"
+            alignItems="center"
+            sx={{ paddingLeft: 1 }}
           >
-            {/* COLUMNAS DENTRO DE LA FILA PARA POSICIONAR LOS ICONOS Y TEXTOS */}
-            <Grid
-              container
-              direction="row"
-              justify="flex-start"
-              alignItems="center"
-              sx={{ paddingLeft: 1 }}
+            <Iconotecnico />
+
+            <Typography
+              sx={{
+                color: "white",
+                marginLeft: 1,
+                fontSize: 14,
+                marginRight: 3,
+              }}
             >
-              <Iconotecnico />
+              Juan Con Miedo Pitacuar
+            </Typography>
 
-              <Typography
-                sx={{
-                  color: "white",
-                  marginLeft: 1,
-                  fontSize: 14,
-                  marginRight: 3,
-                }}
-              >
-                Juan Con Miedo Pitacuar
-              </Typography>
+            <Iconoinformacion />
+            <Typography
+              sx={{
+                color: "white",
+                marginLeft: 1,
+                fontSize: 14,
+                marginRight: 1,
+              }}
+            >
+              7 Tickets por terminar
+            </Typography>
 
-              <Iconoinformacion />
-              <Typography
-                sx={{
-                  color: "white",
-                  marginLeft: 1,
-                  fontSize: 14,
-                  marginRight: 1,
-                }}
-              >
-                7 Tickets por terminar
-              </Typography>
-
-              <Typography
-                sx={{
-                  marginLeft: 2,
-                  marginRight: 2,
-                  fontSize: 14,
-                  color: "white",
-                }}
-              >
-                Bodega #5
-              </Typography>
-            </Grid>
-          </Box>
-        </Grid>
+            <Typography
+              sx={{
+                marginLeft: 2,
+                marginRight: 2,
+                fontSize: 14,
+                color: "white",
+              }}
+            >
+              Bodega #5
+            </Typography>
+          </Grid>
+        </Box>
 
         {/* FILA BLANCA PRIORIDADES */}
-        <Grid item>
-          <Box
-            sx={{
-              bgcolor: "rgb(255,255,255)",
-              p: "10px",
-              borderRadius: "5px",
-              boxShadow: 3,
-            }}
+
+        <Box
+          sx={{
+            bgcolor: "#ffffff",
+            p: 1,
+            borderRadius: 2,
+            boxShadow: 3,
+            marginTop: 2,
+          }}
+        >
+          <Grid
+            container
+            direction="row"
+            justify="flex-start"
+            alignItems="center"
           >
-            <Grid item>
-              {/* COLUMNAS DENTRO DE LA FILA BLANCA PARA POSICIONAR LOS NIVELES */}
-              <Grid
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Typography
-                  sx={{
-                    display: "inline",
-                    margin: "0px",
-                    marginLeft: "15px",
-                    fontSize: "16px",
-                  }}
-                >
-                  Nivel Prioridad
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid
-              item
-              xs={2}
+            {/* COLUMNAS DENTRO DE LA FILA BLANCA PARA POSICIONAR LOS NIVELES */}
+
+            <Typography
               sx={{
-                display: "flex",
-                alignItems: "center",
+                marginLeft: 1,
+                fontSize: 14,
               }}
             >
-              <Iconorellamada></Iconorellamada>
-              <Typography
-                sx={{
-                  display: "inline",
-                  margin: "0px",
-                  marginLeft: "15px",
-                  fontSize: "16px",
-                }}
-              >
-                Rellamada
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={2}
+              Nivel Prioridad
+            </Typography>
+
+            <Typography
               sx={{
-                display: "flex",
-                alignItems: "center",
+                marginLeft: 1,
+                fontSize: 14,
               }}
             >
-              <Iconourgente></Iconourgente>
-              <Typography
-                sx={{
-                  display: "inline",
-                  margin: "0px",
-                  marginLeft: "15px",
-                  fontSize: "16px",
-                }}
-              >
-                Alta
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={2}
+              Rellamada
+            </Typography>
+
+            <Typography
               sx={{
-                display: "flex",
-                alignItems: "center",
+                marginLeft: 1,
+                fontSize: 14,
               }}
             >
-              <Iconomedia></Iconomedia>
-              <Typography
-                sx={{
-                  display: "inline",
-                  margin: "0px",
-                  marginLeft: "15px",
-                  fontSize: "16px",
-                }}
-              >
-                Media
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={2}
+              Alta
+            </Typography>
+
+            <Typography
               sx={{
-                display: "flex",
-                alignItems: "center",
+                marginLeft: 1,
+                fontSize: 14,
               }}
             >
-              <Iconobaja></Iconobaja>
-              <Typography
-                sx={{
-                  display: "inline",
-                  margin: "0px",
-                  marginLeft: "15px",
-                  fontSize: "16px",
-                }}
-              >
-                Baja
-              </Typography>
-            </Grid>
-          </Box>
-        </Grid>
+              Media
+            </Typography>
+
+            <Typography
+              sx={{
+                marginLeft: 1,
+                fontSize: 14,
+              }}
+            >
+              Baja
+            </Typography>
+          </Grid>
+        </Box>
 
         {/* GRID CONTENEDOR DE LAS CARDS GENERADAS POR LA FUNCION  const Tikets*/}
         <Grid
