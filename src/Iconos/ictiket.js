@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const IconAdmin = () => {
+const IconTiketMain = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -22,7 +22,7 @@ const IconAdmin = () => {
             id="Trazado_42"
             data-name="Trazado 42"
             d="M-676.521-1400.845l-.3-.3-1.663-1.663a3.539,3.539,0,0,1-2.519,1.043,3.539,3.539,0,0,1-2.519-1.043,3.566,3.566,0,0,1,0-5.038l-1.663-1.663-.3-.3-1.663-1.662-28.9,28.9,1.663,1.663.3.3,1.663,1.663a3.566,3.566,0,0,1,5.038,0,3.538,3.538,0,0,1,1.043,2.519,3.539,3.539,0,0,1-1.043,2.519l1.663,1.662.3.3,1.663,1.663,28.9-28.9Zm-27.591,26.994a6.316,6.316,0,0,0,.543-2.57,6.294,6.294,0,0,0-1.856-4.48,6.294,6.294,0,0,0-4.48-1.856,6.318,6.318,0,0,0-2.571.543l25.681-25.681a6.318,6.318,0,0,0-.543,2.571,6.294,6.294,0,0,0,1.856,4.48,6.294,6.294,0,0,0,4.48,1.856,6.314,6.314,0,0,0,2.57-.543Z"
-            fill="#ec1b3b"
+            fill="#ffffff"
           />
           <rect
             id="Rectángulo_122"
@@ -30,7 +30,7 @@ const IconAdmin = () => {
             width="1.387"
             height="10.217"
             transform="matrix(0.707, -0.707, 0.707, 0.707, -698.282, -1395.363)"
-            fill="#ec1b3b"
+            fill="#ffffff"
           />
           <rect
             id="Rectángulo_123"
@@ -38,7 +38,7 @@ const IconAdmin = () => {
             width="1.387"
             height="10.217"
             transform="translate(-695.156 -1398.489) rotate(-45)"
-            fill="#ec1b3b"
+            fill="#ffffff"
           />
           <rect
             id="Rectángulo_124"
@@ -46,7 +46,7 @@ const IconAdmin = () => {
             width="1.387"
             height="10.217"
             transform="translate(-692.03 -1401.615) rotate(-45)"
-            fill="#ec1b3b"
+            fill="#ffffff"
           />
           <rect
             id="Rectángulo_125"
@@ -54,7 +54,7 @@ const IconAdmin = () => {
             width="1.387"
             height="10.217"
             transform="translate(-701.409 -1392.237) rotate(-45)"
-            fill="#ec1b3b"
+            fill="#ffffff"
           />
           <rect
             id="Rectángulo_126"
@@ -62,7 +62,7 @@ const IconAdmin = () => {
             width="1.387"
             height="10.217"
             transform="translate(-704.535 -1389.111) rotate(-45)"
-            fill="#ec1b3b"
+            fill="#ffffff"
           />
           <rect
             id="Rectángulo_127"
@@ -70,11 +70,11 @@ const IconAdmin = () => {
             width="1.387"
             height="10.217"
             transform="translate(-707.661 -1385.985) rotate(-45)"
-            fill="#ec1b3b"
+            fill="#ffffff"
           />
         </g>
       </svg>
     </div>
   );
 };
-export default IconAdmin;
+export default IconTiketMain;

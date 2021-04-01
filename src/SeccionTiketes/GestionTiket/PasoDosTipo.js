@@ -3,6 +3,7 @@ import React from "react";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import TemaFormu from "../../Temas/TemaFormu";
 import IcAbajoDos from "../../Iconos/icFabajoDos";
+import { Isquierdo } from "../../Componentes/NavegaFormu";
 
 const useStyles = makeStyles((theme) => ({
   editDialogLar: {
@@ -95,99 +96,42 @@ const PasoDosTipo = (props) => {
           >
             <Grid
               container
-              direction="row"
-              justify="center"
-              alignItems="center"
-            >
-              <Container sx={{ marginLeft: 2 }}>
-                <Grid
-                  container
-                  direction="row"
-                  justify="center"
-                  alignItems="center"
-                >
-                  <Grid item xs={6} sm={6}>
-                    {/****Btn Mantenimiento****/}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => insertarCategoria("mantenimiento")}
-                      className={classes.boton}
-                      sx={{ marginTop: 4, fontSize: 16 }}
-                    >
-                      Mantenimiento
-                    </Button>
-                    {/****Btn Revisión****/}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => insertarCategoria("revision")}
-                      className={classes.boton}
-                      sx={{ marginTop: 4, fontSize: 16 }}
-                    >
-                      Revisión
-                    </Button>
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    {/****Btn Instalación****/}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => insertarCategoria("instalacion")}
-                      className={classes.boton}
-                      sx={{ marginTop: 4, fontSize: 16 }}
-                    >
-                      Instalación
-                    </Button>
-                    {/****Btn Equipo****/}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => insertarCategoria("equipo")}
-                      className={classes.boton}
-                      sx={{ marginTop: 4, fontSize: 16 }}
-                    >
-                      Equipo
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Container>
-            </Grid>
-
-            <Grid
-              container
               direction="column"
               justify="center"
               alignItems="center"
             >
-              {/****Btn Reparación****/}
+              {/****Btn Facturable****/}
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => insertarCategoria("eeparacion")}
+                onClick={() => insertarCategoria("Facturable")}
                 className={classes.boton}
                 sx={{ marginTop: 4, fontSize: 16 }}
               >
-                Reparación
+                Facturable
               </Button>
-            </Grid>
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
-            >
-              {/****Btn Atras****/}
+              {/****Btn Garantia****/}
               <Button
                 variant="contained"
-                color="secondary"
-                onClick={retroceder}
-                className={classes.botonAtras}
-                sx={{ marginTop: 10, fontSize: 14, marginRight: 8 }}
+                color="primary"
+                onClick={() => insertarCategoria("Garantia")}
+                className={classes.boton}
+                sx={{ marginTop: 4, fontSize: 16 }}
               >
-                Atras
+                Garantia
               </Button>
-              <IcAbajoDos />
+
+              {/****Btn Instalación****/}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => insertarCategoria("Instalacion")}
+                className={classes.boton}
+                sx={{ marginTop: 4, fontSize: 16, marginBottom: 8 }}
+              >
+                Instalación
+              </Button>
+              <Isquierdo atras={retroceder} />
             </Grid>
           </Paper>
         </Grid>

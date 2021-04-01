@@ -13,8 +13,9 @@ import { React, useState, useEffect } from "react";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import fire from "./../../fire";
 import TemaFormu from "./../../Temas/TemaFormu";
-import IcAbajoCuatro from "./../../Iconos/icFabajoCuatro";
 import IcTipo from "./../../Iconos/ictipodtik";
+import { Isquierdo } from "../../Componentes/NavegaFormu";
+import { tecnico } from "../../Entidades/tecnico";
 
 const useStyles = makeStyles((theme) => ({
   boton: {
@@ -29,25 +30,27 @@ const useStyles = makeStyles((theme) => ({
   root: {
     position: "relative",
     overflow: "auto", // para que virtualize la lista
-    maxHeight: 280,
+    maxHeight: 305,
+    minHeight: 305,
     height: 280,
   },
 }));
 
 const PasoUnoAsignar = (props) => {
-  const { avanzar, retroceder, setAsignado } = props;
+  const { avanzar, cerrarGestion, setAsignado, setTecnico } = props;
 
   const [tecnicos, setTecnicos] = useState([]);
 
-  const asignarTecnico = (nombre) => {
-    setAsignado(nombre);
+  const asignarTecnico = (tecni) => {
+    setAsignado(tecni.alias);
+    setTecnico(tecni)
     avanzar();
   };
 
   const mostrarLista = () => {
     return tecnicos.map((tecni) => {
       return (
-        <ListItem onClick={(e) => asignarTecnico(tecni.nombre)} button>
+        <ListItem onClick={(e) => asignarTecnico(tecni)} button>
           <Box boxShadow={0} width={450} borderRadius={1} padding={0}>
             <Grid
               container
@@ -78,7 +81,7 @@ const PasoUnoAsignar = (props) => {
                       marginTop: -1,
                     }}
                   >
-                    {tecni.nombre}
+                    {tecni.alias}
                   </Typography>
 
                   <Typography
@@ -105,7 +108,6 @@ const PasoUnoAsignar = (props) => {
                     fontWeight: 700,
                     color: "#3D3D3D",
                     marginTop: -1,
-                   
                   }}
                 >
                   Tipo de Tecnico
@@ -113,7 +115,7 @@ const PasoUnoAsignar = (props) => {
 
                 <Typography
                   color="primary"
-                  sx={{ fontSize: 12, fontStyle: "italic",  }}
+                  sx={{ fontSize: 12, fontStyle: "italic" }}
                 >
                   {tecni.tipo}
                 </Typography>
@@ -136,15 +138,9 @@ const PasoUnoAsignar = (props) => {
       .collection("tecnicos")
       .get()
       .then((snap) => {
-        snap.forEach((tec) => {
-          var tecnico = {
-            nombre: tec.data().nombre,
-            cc: tec.data().cc,
-            tipo: tec.data().tipo,
-            img: tec.data().img,
-          };
-
-          array.push(tecnico);
+        snap.forEach((doc) => {
+          var tecni = new tecnico(doc)
+          array.push(tecni);
         });
         setTecnicos(array);
       })
@@ -170,26 +166,11 @@ const PasoUnoAsignar = (props) => {
             >
               {/****Lista de Maquinas****/}
               <List className={classes.root}>{mostrarLista()}</List>
+
+              
+            <Isquierdo atras={cerrarGestion} />
             </Grid>
 
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
-            >
-              {/****Btn Atras****/}
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={retroceder}
-                className={classes.botonAtras}
-                sx={{ marginTop: 1, fontSize: 14, marginRight: 0 }}
-              >
-                Atras
-              </Button>
-              <IcAbajoCuatro />
-            </Grid>
           </Paper>
         </Grid>
       </ThemeProvider>

@@ -24,10 +24,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import algoliasearch from "algoliasearch";
 import TemaDialog from "../Temas/TemaDialog";
-import Tiket from '../Tiket/Tiket';
-import { ThemeProvider } from '@material-ui/core/styles';
-
-
+import Tiket from "../Tiket/TiketDetalle";
+import { ThemeProvider } from "@material-ui/core/styles";
+import TiketCompleto from "../Componentes/TiketCompleto";
+import { tiket } from "./../Entidades/tikets";
+import { tiketFromAlgolia } from "./../Entidades/tiketsFromAlgolia";
 
 const TiketTodos = () => {
   const [tikets, setTikets] = useState([]);
@@ -47,9 +48,9 @@ const TiketTodos = () => {
   );
   const index = client.initIndex("tikets");
 
-  const manejoCerrarDialog = () =>{
+  const manejoCerrarDialog = () => {
     setOpenDetalle(false);
-  }
+  };
 
   const manejoVerDetalle = (tik) => {
     console.log("cargando detalle tiket...");
@@ -101,254 +102,6 @@ const TiketTodos = () => {
     }
   };
 
-  const llenarTikets = () => {
-    console.log("llenando tikets..." + tikets.length);
-
-    return tikets.map((tik) => {
-      return (
-        <Box
-          // className={classes.rowTable}
-          backgroundColor="#ffffff"
-          marginTop={2}
-          borderRadius={2}
-          border={1}
-          height={75}
-          boxShadow={4}
-          onClick={(e) => manejoVerDetalle(tik)}
-        >
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-around"
-            alignItems="center"
-            paddingTop={2}
-            paddingRight={2}
-          >
-            {/***Tab Numero****/}
-            <CircleIcon />
-            <Typography
-              sx={{
-                fontWeight: 500,
-                fontSize: 16,
-                marginLeft: 1,
-                width: 100,
-                color: "#3D3D3D",
-              }}
-            >
-              {tik.id}
-            </Typography>
-
-            {/***Tab fecha****/}
-            <IconCalendar />
-
-            <Grid
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              sx={{ marginLeft: 3 }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  fontWeight: 600,
-                  color: "#EC1B3B",
-                  fontStyle: "italic",
-                  marginTop: 0,
-                  width: 100,
-                }}
-              >
-                Fecha de Creacion
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  width: 150,
-                  fontWeight: 700,
-                  color: "#3D3D3D",
-                  marginTop: -0.5,
-                }}
-              >
-                {tik.fechaCreacion}
-              </Typography>
-            </Grid>
-
-            {/****tAB Aolicitante */}
-            <IconSolicitante />
-
-            <Grid
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              sx={{ marginLeft: 3 }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  fontWeight: 600,
-                  color: "#EC1B3B",
-                  fontStyle: "italic",
-                  marginTop: 0,
-                  width: 100,
-                }}
-              >
-                Solicitante
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  width: 250,
-                  fontWeight: 700,
-                  color: "#3D3D3D",
-                  marginTop: -0.5,
-                }}
-              >
-                {tik.nombre}
-              </Typography>
-            </Grid>
-
-            {/****Tab Tipo****/}
-            <IconTipo />
-
-            <Grid
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              sx={{ marginLeft: 3 }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  fontWeight: 600,
-                  color: "#EC1B3B",
-                  fontStyle: "italic",
-                  marginTop: -0.2,
-                  width: 100,
-                }}
-              >
-                Tipo
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  width: 150,
-                  fontWeight: 700,
-                  color: "#3D3D3D",
-                  marginTop: -0.5,
-                }}
-              >
-                {tik.tipo}
-              </Typography>
-            </Grid>
-
-            {/****Tab Ciudad****/}
-            <IconTipo />
-
-            <Grid
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              sx={{ marginLeft: 3 }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  fontWeight: 600,
-                  color: "#EC1B3B",
-                  fontStyle: "italic",
-                  marginTop: -0.2,
-                  width: 100,
-                }}
-              >
-                Ciudad
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  width: 150,
-                  fontWeight: 700,
-                  color: "#3D3D3D",
-                  marginTop: -0.5,
-                }}
-              >
-                {tik.ciudad}
-              </Typography>
-            </Grid>
-
-            {/****Tab Tecnico asignado****/}
-            <IconTipo />
-
-            <Grid
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              sx={{ marginLeft: 3 }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  fontWeight: 600,
-                  color: "#EC1B3B",
-                  fontStyle: "italic",
-                  marginTop: -0.2,
-                  width: 100,
-                }}
-              >
-                Tecnico Asignado
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  width: 150,
-                  fontWeight: 700,
-                  color: "#3D3D3D",
-                  marginTop: -0.5,
-                }}
-              >
-                {tik.asignado}
-              </Typography>
-            </Grid>
-
-            {/****Tab Estado****/}
-            <IconEstado />
-
-            <Grid
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              sx={{ marginLeft: 3 }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  fontWeight: 400,
-                  color: "#212121",
-                  fontStyle: "italic",
-                  marginTop: 0,
-                  width: 100,
-                  textAlign: "end",
-                }}
-              >
-                Estado
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  width: 100,
-                  fontWeight: 700,
-                  color: "#3D3D3D",
-                  marginTop: -0.5,
-                  textAlign: "end",
-                }}
-              >
-                {tik.estado}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-      );
-    });
-  };
-
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -394,8 +147,26 @@ const TiketTodos = () => {
 
   const Boton = ({ value, onClick }) => {
     return (
-      <Button variant="contained" color="secondary" onClick={onClick}>
-        {value}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={onClick}
+        sx={{ width: 160, fontSize: 10, marginLeft: 1 }}
+      >
+        Fecha Inicio {value}
+      </Button>
+    );
+  };
+
+  const BotonFin = ({ value, onClick }) => {
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={onClick}
+        sx={{ width: 160, fontSize: 10, marginLeft: 2 }}
+      >
+        Fecha Final {value}
       </Button>
     );
   };
@@ -411,20 +182,9 @@ const TiketTodos = () => {
       hits.forEach((tik) => {
         console.log(tik.nombre);
 
-        var tiket = {
-          id: tik.objectID,
-          nombre: tik.nombre,
-          asignado: tik.asignado,
-          ciudad: tik.ciudad,
-          estado: tik.estado,
-          factura: tik.factura,
-          fechaCreacion: tik.fechaCreacion, // new Date();
-          prioridad: tik.prioridad,
-          tipo: tik.tipo,
-          firebase: false,
-        };
+        var tiko = new tiketFromAlgolia(tik);
 
-        setTikets((mas) => mas.concat(tiket));
+        setTikets((mas) => mas.concat(tiko));
       });
 
       console.log(mas.length);
@@ -452,31 +212,9 @@ const TiketTodos = () => {
         var arreglo = [];
         setTikets(arreglo);
         snap.forEach((doc) => {
-          var tiket = {
-            id: doc.data().id,
-            idCliente: doc.data().idCliente,
-            nombre: doc.data().nombre,
-            direccion: doc.data().direccion,
-            celular: doc.data().celular,
-            celularDos: doc.data().celularDos,
-            anexos: doc.data().anexos,
-            asignado: doc.data().asignado,
-            ciudad: doc.data().ciudad,
-            comentario: doc.data().comentario,
-            diagnostico: doc.data().diagnostico, // es array
-            direccion: doc.data().direccion,
-            email: doc.data().email,
-            estado: doc.data().estado,
-            factura: doc.data().factura,
-            falla: doc.data().falla,
-            fechaCreacion: getFecha(doc.data().fechaCreacion), // new Date();
-            legalizacion: getFecha(doc.data().legalizacion), // new Date()
-            maquinas: doc.data().maquinas, // array
-            prioridad: doc.data().prioridad,
-            tipo: doc.data().tipo,
-            ultimaVisita: getFecha(doc.data().ultimaVisita), // date()
-          };
-          setTikets((arreglo) => arreglo.concat(tiket));
+          var tik = new tiket(doc);
+
+          setTikets((arreglo) => arreglo.concat(tik));
         });
       });
   };
@@ -531,33 +269,9 @@ const TiketTodos = () => {
         var arreglo = [];
         setTikets(arreglo);
         snap.forEach((doc) => {
-          var tiket = {
-            id: doc.data().id,
-            idCliente: doc.data().idCliente,
-            nombre: doc.data().nombre,
-            direccion: doc.data().direccion,
-            celular: doc.data().celular,
-            celularDos: doc.data().celularDos,
-            anexos: doc.data().anexos,
-            asignado: doc.data().asignado,
-            ciudad: doc.data().ciudad,
-            comentario: doc.data().comentario,
-            diagnostico: doc.data().diagnostico, // es array
-            direccion: doc.data().direccion,
-            email: doc.data().email,
-            estado: doc.data().estado,
-            factura: doc.data().factura,
-            falla: doc.data().falla,
-            fechaCreacion: getFecha(doc.data().fechaCreacion), // new Date();
-            legalizacion: getFecha(doc.data().legalizacion), // new Date()
-            maquinas: doc.data().maquinas, // array
-            prioridad: doc.data().prioridad,
-            tipo: doc.data().tipo,
-            ultimaVisita: getFecha(doc.data().ultimaVisita), // date()
-            firebase: true,
-          };
+          var tik = new tiket(doc);
 
-          setTikets((arreglo) => arreglo.concat(tiket));
+          setTikets((arreglo) => arreglo.concat(tik));
         });
       });
   }, [orden]);
@@ -579,14 +293,10 @@ const TiketTodos = () => {
           {/****Barra superior****/}
           <Box
             sx={{
-              border: 2,
-              borderColor: "#F1546C",
-              width: 520,
-              height: 50,
               backgroundColor: "#ffffff",
               borderRadius: 2,
-              boxShadow: 2,
-              padding: 0.5,
+              boxShadow: 4,
+              padding: 1,
             }}
           >
             <Grid
@@ -605,7 +315,7 @@ const TiketTodos = () => {
                 customInput={<Boton />}
               />
 
-              <Typography>A</Typography>
+              <Typography sx={{ marginLeft: 2 }}>A</Typography>
               {/****Btn Fecha Fin****/}
               <DatePicker
                 selected={endDate}
@@ -613,16 +323,18 @@ const TiketTodos = () => {
                 startDate={startDate}
                 dateFormat="dd-MM-yyyy"
                 onChange={(date) => setEndDate(date)}
-                customInput={<Boton />}
+                customInput={<BotonFin />}
               />
 
               <Button
                 variant="contained"
-                color="primary"
+                color="secondary"
                 onClick={(e) => buscarPorFecha(e)}
+                sx={{ marginLeft: 2 }}
               >
-                B
+                Buscar
               </Button>
+
               {/****Barra Buscar****/}
               <Input
                 placeholder="Buscar"
@@ -635,7 +347,7 @@ const TiketTodos = () => {
                     fontSize: 16,
                     color: "gray",
                     borderColor: "#F1546C",
-                    width: 140,
+                    width: 160,
                   },
                 }}
                 endAdornment={
@@ -646,6 +358,7 @@ const TiketTodos = () => {
                     <SearchIcon />
                   </IconButton>
                 }
+                sx={{ marginLeft: 4 }}
               />
               <IconButton
                 edge="end"
@@ -654,7 +367,7 @@ const TiketTodos = () => {
                 aria-haspopup="true"
                 onClick={handleProfileMenuOpen}
                 color="inherit"
-                sx={{ width: 40, height: 40 }}
+                sx={{ width: 40, height: 40, marginLeft: 2 }}
               >
                 <IconMore />
               </IconButton>
@@ -667,12 +380,10 @@ const TiketTodos = () => {
             sx={{
               border: 1,
               borderColor: "#C2C1C1",
-              width: 420,
-              height: 40,
               backgroundColor: "#ffffff",
               borderRadius: 1,
               boxShadow: 2,
-              padding: 0.5,
+              padding: 1,
               marginTop: 4,
             }}
           >
@@ -682,24 +393,97 @@ const TiketTodos = () => {
               justifyContent="flex-start"
               alignItems="center"
             >
-              <IconAlert />
-
-              <CircleIcon />
-              <Typography>Rellamada</Typography>
-              <CircleIcon />
-              <Typography>Urgente</Typography>
-              <CircleIcon />
-              <Typography>Media</Typography>
-              <CircleIcon />
-              <Typography>Ninguna</Typography>
+              <Typography
+                sx={{
+                  fontSize: 12,
+                  fontWeight: 500,
+                  fontStyle: "italic",
+                  color: "#727070",
+                  marginLeft: 2,
+                  marginRight: 2,
+                }}
+              >
+                Nivel de Prioridad
+              </Typography>
+              <Box
+                sx={{
+                  width: 14,
+                  height: 14,
+                  backgroundColor: "#FF0034",
+                  borderRadius: 2,
+                }}
+              />
+              <Typography
+                sx={{
+                  marginLeft: 1,
+                  marginRight: 1,
+                  fontSize: 12,
+                  fontStyle: "italic",
+                  color: "#3D3D3D",
+                  fontWeight: 500,
+                }}
+              >
+                Rellamada
+              </Typography>
+              <Box
+                sx={{
+                  width: 14,
+                  height: 14,
+                  backgroundColor: "#FE9916",
+                  borderRadius: 2,
+                }}
+              />
+              <Typography    sx={{
+                  marginLeft: 1,
+                  marginRight: 1,
+                  fontSize: 12,
+                  fontStyle: "italic",
+                  color: "#3D3D3D",
+                  fontWeight: 500,
+                }}>Alta</Typography>
+              <Box
+                sx={{
+                  width: 14,
+                  height: 14,
+                  backgroundColor: "#F6D119",
+                  borderRadius: 2,
+                }}
+              />
+              <Typography    sx={{
+                  marginLeft: 1,
+                  marginRight: 1,
+                  fontSize: 12,
+                  fontStyle: "italic",
+                  color: "#3D3D3D",
+                  fontWeight: 500,
+                }}>Media</Typography>
+              <Box
+                sx={{
+                  width: 14,
+                  height: 14,
+                  backgroundColor: "#0F996D",
+                  borderRadius: 2,
+                }}
+              />
+              <Typography    sx={{
+                  marginLeft: 1,
+                  marginRight: 2,
+                  fontSize: 12,
+                  fontStyle: "italic",
+                  color: "#3D3D3D",
+                  fontWeight: 500,
+                
+                }}>Baja</Typography>
             </Grid>
-
-            <Divider sx={{ width: 1200, marginTop: 3 }} />
           </Box>
+          
         </Grid>
-        <br></br>
-        {tikets ? llenarTikets() : <div></div>}
+        
       </Grid>
+      <br></br>
+        {tikets.map((tiket) => {
+          return <TiketCompleto tiket={tiket} />;
+        })}
 
       {/****Detalle Tikets****/}
       <ThemeProvider theme={TemaDialog}>

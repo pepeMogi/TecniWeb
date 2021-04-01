@@ -19,10 +19,18 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import CargaLaboral from "../Carga/CargaLaboral";
+import AgendaLaboral from "../Carga/AgendaLaboral";
 import TemaFormu from "../Temas/TemaFormu";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Box, Fab, Badge, SwipeableDrawer } from "@material-ui/core";
+import {
+  Box,
+  Fab,
+  Badge,
+  SwipeableDrawer,
+  Divider,
+  Avatar,
+  Grid,
+} from "@material-ui/core";
 import IcCarga from "../Iconos/iccarga";
 import IcIsqui from "../Iconos/icsqui";
 import IcTiket from "../Iconos/ictiket";
@@ -45,8 +53,11 @@ import TiketPropios from "./../SeccionTiketes/TiketsPropios";
 import Banner from "../Catalogo/SeccionBanner/Banners";
 import Maquinas from "../Catalogo/SeccionMaquinas/Maquinas";
 import TiketsLegalizar from "../SeccionLegalizar/TiketsLegalizar";
+import { tecnico } from "../Entidades/tecnico";
 
-const drawerWidth = 240;
+
+
+const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -77,36 +88,21 @@ const useStyles = makeStyles((theme) => ({
   },
   drawer: {
     width: drawerWidth,
+    minWidth: 260,
     flexShrink: 0,
+    boxShadow: 10
   },
   drawerPaper: {
     width: drawerWidth,
+    minWidth: 260,
     boxSizing: "border-box",
-  },
-  drawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: "#212121",
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: "center",
-  },
-
-  drawerHeaderDos: {
-    display: "flex",
-    alignItems: "center",
-
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: "flex-end",
+    boxShadow: 10
   },
 
   content: {
     flexGrow: 1,
-
     backgroundColor: "#E8E7E7",
+    marginTop: 60,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
@@ -126,7 +122,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
   sectionDesktop: {
-    backgroundColor: "red",
     display: "none",
     [theme.breakpoints.up("md")]: {
       display: "flex",
@@ -167,6 +162,7 @@ const Main = (props) => {
   const [admin, setAdmin] = useState("");
   const [id, setId] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [numNuevos, setNumNuevos] = useState("");
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -189,7 +185,6 @@ const Main = (props) => {
   const handleClickLegalizar = () => {
     setOpenLegalizar(!openLegalizar);
   };
-
 
   const handleClickDos = () => {
     setOpenDos(!openDos);
@@ -241,23 +236,36 @@ const Main = (props) => {
     </Menu>
   );
 
-  useEffect(() => {
+   useEffect(() => {
+     console.log("User " + user);
     fire
       .firestore()
       .collection("tecnicos")
-      .where("correo", "==", user)
+      .where("email", "==", user)
       .get()
       .then((snap) => {
-        snap.forEach((tecni) => {
-          setAdmin(tecni.data().nombre);
-          setAvatar(tecni.data().img);
-          setId(tecni.data().id);
+        snap.forEach((doc) => {
+          var tecni = new tecnico(doc);
+          setAdmin(tecni);
         });
+
+
       })
       .catch((err) => {
         alert(err);
       });
   }, [user]);
+
+  useEffect(() => {
+    fire
+      .firestore()
+      .collection("contadores")
+      .doc("nuevosTikets")
+      .onSnapshot((doc) => {
+        var num = doc.data().numero;
+        setNumNuevos(num);
+      });
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -280,23 +288,21 @@ const Main = (props) => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              Persistent drawer
+              Tecniprin Soluciones de impresion
             </Typography>
 
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <IconButton aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                aria-label="show 17 new notifications"
+              <IconButton           
                 color="inherit"
               >
-                <Badge badgeContent={17} color="secondary">
+                {numNuevos ? (
+                  <Badge badgeContent={numNuevos} color="secondary">
+                    <NotificationsIcon />
+                  </Badge>
+                ) : (
                   <NotificationsIcon />
-                </Badge>
+                )}
               </IconButton>
               <IconButton
                 edge="end"
@@ -308,19 +314,18 @@ const Main = (props) => {
               >
                 <AccountCircle />
               </IconButton>
-              <IconButton
-                onClick={manejoAbrirChat}
-                color="inherit"
-                onClose={cerrarChat}
-              >
-                <IconChat />
-              </IconButton>
             </div>
           </Toolbar>
         </AppBar>
         {renderMenu}
         <Router>
           <ThemeProvider theme={TemaDrawer}>
+
+
+   
+  
+
+
             <Drawer
               className={classes.drawer}
               variant="persistent"
@@ -330,16 +335,22 @@ const Main = (props) => {
                 paper: classes.drawerPaper,
               }}
             >
-              <div className={classes.drawerHeader}>
-                <Box padding={2}>
-                  <IcCarga />
+              <div>
+                <Grid
+                  container
+                  direction="column"
+                  justify="center"
+                  alignItems="center"
+                  sx={{ marginTop: 1 }}
+                >
+                  <Avatar src={admin.img} sx={{ width: 100, height: 100, marginTop: 4 }} />
                   <Typography
                     variant="h7"
-                    sx={{ textAlign: "center", color: "#ffffff" }}
+                    sx={{ textAlign: "center", color: "#ffffff", marginTop: 1 }}
                   >
-                    CARGA LABORAL
+                   {admin.alias}
                   </Typography>
-                </Box>
+                </Grid>
               </div>
 
               <div onClick={handleDrawerClose}>
@@ -347,15 +358,17 @@ const Main = (props) => {
               </div>
 
               <List>
-                <Link to="/" className={classes.link}>
-                  <ListItem button onClick={handleClickTikes}>
-                    <ListItemIcon>
-                      <IcTiket />
-                    </ListItemIcon>
-                    <ListItemText primary={"TIKETS"} />
-                    {openTikets ? <IcArriba /> : <IcAbajo />}
-                  </ListItem>
-                </Link>
+                <ListItem button onClick={handleClickTikes}>
+                  <ListItemIcon>
+                    <IcTiket />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={"TIKETS"}
+                    sx={{ color: "#ffffff", marginLeft: 3, fontWeight: 800 }}
+                  />
+                  {openTikets ? <IcArriba /> : <IcAbajo />}
+                </ListItem>
+                <Divider sx={{ color: "#ffffff", borderTop: 1, margin: 1 }} />
 
                 <Collapse in={openTikets} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
@@ -391,24 +404,74 @@ const Main = (props) => {
                   </List>
                 </Collapse>
 
-                <Link to="/about" className={classes.link}>
-                  <ListItem button onClick={handleClickTecnicos}>
-                    <ListItemIcon>
-                      <IcTecni />
-                    </ListItemIcon>
-                    <ListItemText primary={"TECNICOS"} />
-                    {openTecnicos ? <IcArriba /> : <IcAbajo />}
-                  </ListItem>
-                </Link>
-              </List>
+                <ListItem button onClick={handleClickLegalizar}>
+                  <ListItemIcon>
+                    <IcComer />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="LEGALIZACIÓN"
+                    sx={{ color: "#ffffff", fontWeight: 800 }}
+                  />
+                  {openLegalizar ? <IcArriba /> : <IcAbajo />}
+                </ListItem>
+                <Divider
+                  sx={{
+                    color: "#ffffff",
+                    borderTop: 1,
+                    marginBottom: 1,
+                    marginTop: 1,
+                    marginLeft: 1,
+                    marginRight: 1,
+                  }}
+                />
 
-              <Collapse in={openTecnicos} timeout="auto" unmountOnExit>
+                <Collapse in={openLegalizar} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <Link to="/legalizar" className={classes.link}>
+                      <ListItem button>
+                        <Box sx={{ marginLeft: 7 }}>
+                          <ListItemText sx={{ color: "#ffffff" }}>
+                            Tikets para legalizar
+                          </ListItemText>
+                        </Box>
+                      </ListItem>
+                    </Link>
+                  </List>
+                </Collapse>
+
+                <ListItem button onClick={handleClickTecnicos}>
+                  <ListItemIcon>
+                    <IcTecni />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={"TECNICOS"}
+                    sx={{ color: "#ffffff", marginLeft: 1, fontWeight: 800 }}
+                  />
+                  {openTecnicos ? <IcArriba /> : <IcAbajo />}
+                </ListItem>
+                <Divider
+                  sx={{
+                    color: "#ffffff",
+                    borderTop: 1,
+                    marginTop: 1,
+                    marginLeft: 1,
+                    marginRight: 1,
+                  }}
+                />
+            
+
+              <Collapse
+                in={openTecnicos}
+                timeout="auto"
+                unmountOnExit
+                sx={{ marginBottom: 4 }}
+              >
                 <List component="div" disablePadding>
-                  <Link to="/carga" className={classes.link}>
+                  <Link to="/agenda" className={classes.link}>
                     <ListItem button>
                       <Box sx={{ marginLeft: 7 }}>
                         <ListItemText sx={{ color: "#ffffff" }}>
-                          Carga Laboral
+                          Agenda
                         </ListItemText>
                       </Box>
                     </ListItem>
@@ -435,43 +498,100 @@ const Main = (props) => {
                 </List>
               </Collapse>
 
-              <Link to="/" className={classes.link}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <IcRepu />
-                  </ListItemIcon>
-                  <ListItemText primary="REPUESTOS" />
-                </ListItem>
-              </Link>
+              <ListItem button>
+                <ListItemIcon>
+                  <IcRepu />
+                </ListItemIcon>
+                <ListItemText
+                  primary="REPUESTOS"
+                  sx={{ color: "#ffffff", marginLeft: 1, fontWeight: 800 }}
+                />
+              </ListItem>
+              <Divider
+                sx={{
+                  color: "#ffffff",
+                  borderTop: 1,
+                  marginTop: 1,
+                  marginLeft: 1,
+                  marginRight: 1,
+                }}
+              />
 
-              <Link to="/" className={classes.link}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <IcMaqui />
-                  </ListItemIcon>
-                  <ListItemText primary="MAQUINAS" />
-                </ListItem>
-              </Link>
+              <ListItem button>
+                <ListItemIcon>
+                  <IcMaqui />
+                </ListItemIcon>
+                <ListItemText
+                  primary="MAQUINAS"
+                  sx={{
+                    color: "#ffffff",
+                    marginLeft: 1,
+                    marginTop: 1,
+                    fontWeight: 800,
+                  }}
+                />
+              </ListItem>
 
-              <Link to="/" className={classes.link}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <IcCliente />
-                  </ListItemIcon>
-                  <ListItemText primary="CLIENTES" />
-                </ListItem>
-              </Link>
+              <Divider
+                sx={{
+                  color: "#ffffff",
+                  borderTop: 1,
+                  marginTop: 1,
+                  marginLeft: 1,
+                  marginRight: 1,
+                }}
+              />
 
-              <Link to="/" className={classes.link}>
-                <ListItem button onClick={handleClickComer}>
-                  <ListItemIcon>
-                    <IcComer />
-                  </ListItemIcon>
-                  <ListItemText primary="COMERCIAL" />
-                  {openComer ? <IcArriba /> : <IcAbajo />}
-                </ListItem>
-              </Link>
+              <ListItem button>
+                <ListItemIcon>
+                  <IcCliente />
+                </ListItemIcon>
+                <ListItemText
+                  primary="CLIENTES"
+                  sx={{
+                    color: "#ffffff",
+                    marginLeft: 1,
+                    marginTop: 1,
+                    fontWeight: 800,
+                  }}
+                />
+              </ListItem>
 
+              <Divider
+                sx={{
+                  color: "#ffffff",
+                  borderTop: 1,
+                  marginTop: 1,
+                  marginLeft: 1,
+                  marginRight: 1,
+                }}
+              />
+
+              <ListItem button onClick={handleClickComer}>
+                <ListItemIcon>
+                  <IcComer />
+                </ListItemIcon>
+                <ListItemText
+                  primary="COMERCIAL"
+                  sx={{
+                    color: "#ffffff",
+                    marginLeft: 1,
+                    marginTop: 1,
+                    fontWeight: 800,
+                  }}
+                />
+                {openComer ? <IcArriba /> : <IcAbajo />}
+              </ListItem>
+
+              <Divider
+                sx={{
+                  color: "#ffffff",
+                  borderTop: 1,
+                  marginTop: 1,
+                  marginLeft: 1,
+                  marginRight: 1,
+                }}
+              />
               <Collapse in={openComer} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   <Link to="/" className={classes.link}>
@@ -506,32 +626,10 @@ const Main = (props) => {
                   </Link>
                 </List>
               </Collapse>
-
-              <Link className={classes.link}>
-                <ListItem button onClick={handleClickLegalizar}>
-                  <ListItemIcon>
-                    <IcComer />
-                  </ListItemIcon>
-                  <ListItemText primary="LEGALIZACIÓN" />
-                  {openLegalizar ? <IcArriba /> : <IcAbajo />}
-                </ListItem>
-              </Link>
-
-              <Collapse in={openLegalizar} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <Link to="/legalizar" className={classes.link}>
-                    <ListItem button>
-                      <Box sx={{ marginLeft: 7 }}>
-                        <ListItemText sx={{ color: "#ffffff" }}>
-                          Tikets para legalizar
-                        </ListItemText>
-                      </Box>
-                    </ListItem>
-                  </Link>
-                </List>
-              </Collapse>
-              
+              </List>
             </Drawer>
+
+           
 
             <main
               className={clsx(classes.content, {
@@ -545,9 +643,9 @@ const Main = (props) => {
                     // pagina no encontrada
                   </Container>
                 </Route>
-                <Route exact path="/carga">
+                <Route exact path="/agenda">
                   <Container maxWidth={false} padding={0}>
-                    <CargaLaboral />
+                    <AgendaLaboral />
                   </Container>
                 </Route>
                 <Route exact path="/historialtrabajo">
@@ -562,7 +660,7 @@ const Main = (props) => {
                 </Route>
                 <Route exact path="/tiketsnuevos">
                   <Container maxWidth={false} padding={0}>
-                    <TiketsNuevos />
+                    <TiketsNuevos setNumNuevos={setNumNuevos} />
                   </Container>
                 </Route>
                 <Route exact path="/tiketstodos">
@@ -572,10 +670,10 @@ const Main = (props) => {
                 </Route>
                 <Route exact path="/tiketspropios">
                   <Container maxWidth={false} padding={0}>
-                    <TiketPropios/>
+                    <TiketPropios />
                   </Container>
                 </Route>
-               
+
                 {/* RUTA DE BANNER */}
                 <Route exact path="/banners">
                   <Container maxWidth={false} padding={0}>
@@ -588,14 +686,12 @@ const Main = (props) => {
                     <Maquinas></Maquinas>
                   </Container>
                 </Route>
-                
 
-                  {/* RUTA DE LEGALIZAR */}
-                  <Route exact path="/legalizar">
+                {/* RUTA DE LEGALIZAR */}
+                <Route exact path="/legalizar">
                   <Container maxWidth={false} padding={0}>
-                    <TiketsLegalizar/>
+                    <TiketsLegalizar />
                   </Container>
-                  
                 </Route>
               </Switch>
               <Fab style={fabStyle}>Hola</Fab>

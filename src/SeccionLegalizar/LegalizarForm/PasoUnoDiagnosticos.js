@@ -11,9 +11,12 @@ import { diagnostico } from "../../Entidades/diagnostico";
 import DiagnosticoCard from "../../Componentes/DiagnosticoCard";
 
 const PasoUnoDiagnosticos = (props) => {
-  const { avanzar, retroceder, tik, setDiagnosticoLocal } = props;
+  const { avanzar, retroceder, tiket, setDiagnosticoLocal } = props;
   const [diagnosticos, setDiagnosticos] = useState([]);
   const [completo, setCompleto] = useState([]);
+
+  console.log(tiket.diagnosticos);
+ 
 
   const siguiente = (diag) => {
         console.log(diag.id);
@@ -27,7 +30,7 @@ const PasoUnoDiagnosticos = (props) => {
 
   useEffect(() => {
     var array = [];
-    tik.diagnostico.forEach((element) => {
+    tiket.diagnosticos.forEach((element) => {
       console.log(element);
       array.push(element);
     });
@@ -74,8 +77,8 @@ const PasoUnoDiagnosticos = (props) => {
             {/***Contenido de Formulario****/}
             {completo.map((diag) => {
               return (
-                <div onClick={(e) => siguiente(diag)}>
-                  <DiagnosticoCard diag={diag} />
+                <div onClick={(e) => siguiente(diag)} >
+                  <DiagnosticoCard diag={diag}  />
                 </div>
               );
             })}

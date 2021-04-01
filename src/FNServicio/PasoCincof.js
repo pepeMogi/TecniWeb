@@ -10,17 +10,16 @@ import {
   ImageListItem,
   Typography,
   Fade,
-  CircularProgress
+  CircularProgress,
 } from "@material-ui/core";
 import { React, useState, createRef } from "react";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import fire from "../fire";
 import TemaFormu from "../Temas/TemaFormu";
 import IcAbajoCinco from "../Iconos/icFabajoCinco";
-import TiketNuevo from "./../Tiket/TiketNuevo";
 import algoliasearch from "algoliasearch";
-
-
+import TiketDetalleNoEdit from "../Componentes/TiketsDetalle/TiketDetalleNoEdit";
+import { tiket } from './../Entidades/tikets';
 
 const useStyles = makeStyles((theme) => ({
   editDialog: {
@@ -73,14 +72,15 @@ const PasoCuatrof = (props) => {
     cuidad,
     celular,
     celularDos,
-    maquinasSelec,
+    maquinaSelec,
     cerrarDialog,
     retroceder,
+    solicitante
   } = props;
 
   const [progress, setProgress] = useState(0);
-  const [prog,setProg] = useState(false);
-  const [progFin,setProgFin] = useState(false);
+  const [prog, setProg] = useState(false);
+  const [progFin, setProgFin] = useState(false);
   const [open, setOpen] = useState(false);
   const hiddenFileInput = createRef(null);
   const [tiketDetalle, setTiketeDetalle] = useState("");
@@ -164,29 +164,24 @@ const PasoCuatrof = (props) => {
   const subirAlgolia = (tiket) => {
     console.log("subiendo a algolia...");
 
-    var text = "";
-    tiket.maquinas.forEach((id) => {
-      text += " " + id;
-    });
 
-    var tiket = {
+    var tiketAlgolia = {
       objectID: tiket.id,
       nombre: tiket.nombre,
+      solicitante: tiket.solicitante,
       asignado: tiket.asignado,
       ciudad: tiket.ciudad,
       estado: tiket.estado,
-      factura: tiket.factura,
-      fechaCreacion: getFecha(tiket.fechaCreacion), // new Date();
+      factura: "",
+      fechaCreacion: getFecha(tiket.fechaCreacion),
       prioridad: tiket.prioridad,
       tipo: tiket.tipo,
-
-      maquinas: text,
-      nit: "",
-      factura: "",
+      nit: tiket.nit,
+      maquina: tiket.idMaquina,     
     };
 
     index
-      .saveObject(tiket, {
+      .saveObject(tiketAlgolia, {
         // All the following parameters are optional
         autoGenerateObjectIDIfNotExist: false,
         // any other requestOptions
@@ -204,8 +199,8 @@ const PasoCuatrof = (props) => {
     return anexos.map((item) => (
       <ImageListItem key={item}>
         <Box className={classes.caja}>
-          <img src={item} className={classes.img} />          
-        </Box>               
+          <img src={item} className={classes.img} />
+        </Box>
       </ImageListItem>
     ));
   };
@@ -257,27 +252,38 @@ const PasoCuatrof = (props) => {
 
         var idTiket = "t" + cosecutivo;
 
+        var sol = "";
+        if(solicitante != nombre){
+          sol = solicitante;
+        }
+  
+
         const tiket = {
-          id: idTiket,
-          celular: celular,
-          celularDos: celularDos ? celularDos : "",
-          nombre: nombre,
-          tipo: "",
-          fechaCreacion: new Date(),
-          estado: "nuevo",
-          direccion: direccion,
-          ciudad: cuidad,
-          factura: "0",
-          maquinas: maquinasSelec,
-          falla: falla,
-          diagnostico: new Array(),
-          asignado: "",
-          email: email,
           anexos: anexos,
+          asignado: "",
+          celularCliente: celular,
+          celularSolicitante: celularDos,
+          ciudad: cuidad,
+          contadorBN: "0",
+          contadorColor: "0",
+          diagnosticos: new Array(),
+          direccion: direccion,
+          email: email,
+          estado: "nuevo",
+          facturas: new Array(),
+          falla: falla,
+          fechaCreacion: new Date(),
+          id: idTiket,
           idCliente: id,
-          legalizacion: new Date("00000000000"),
-          prioridad: 0,
-          ultimaVisita: new Date("00000000000"),
+          idMaquina: maquinaSelec,
+          legalizacion: new Date("12/31/1969"),
+          nit: "",
+          nombre: nombre,
+          pendiente: false,
+          prioridad: 2,
+          solicitante: sol,
+          tipo: "",
+          ultimaVisita: new Date("12/31/1969"),
         };
 
         fire
@@ -286,29 +292,37 @@ const PasoCuatrof = (props) => {
           .doc(idTiket)
           .set(tiket)
           .then((doc) => {
-            subirAlgolia(tiket);
 
+            console.log("Subido");
+           subirAlgolia(tiket);
             var fecha = getFecha(tiket.fechaCreacion);
             tiket.fechaCreacion = fecha;
             tiket.legalizacion = "0";
             setTiketeDetalle(tiket);
-            
+
+            var nuevo = {
+              numero: cosecutivo,
+            }
+
             fire
               .firestore()
               .collection("contadores")
-              .doc("numTikets")
-              .update({ numero: cosecutivo })
+              .doc("numTikets")              
+              .set(nuevo)
               .then((doc) => {
-                setOpen(true);
+                setOpen(true); /// este es el que genera el error
                 setProgFin(false);
+                enviarNotificacion(tiket);
               })
               .catch((err) => {
-                alert("intentar otra vez");
                 setProgFin(false);
+                alert(err);
+                
               });
           })
+
           .catch((err) => {
-            alert("Error");
+            alert(err);
             setProgFin(false);
           });
       })
@@ -320,7 +334,7 @@ const PasoCuatrof = (props) => {
 
   const subir = (e) => {
     e.preventDefault();
-    
+
     hiddenFileInput.current.click();
   };
 
@@ -329,31 +343,52 @@ const PasoCuatrof = (props) => {
     cerrarDialog();
   };
 
+  const enviarNotificacion = (tiket) => {
+    console.log("enviando notificacion...");
+
+    fetch("https://fcm.googleapis.com/fcm/send", {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization:
+          "key=AAAAgoHWsk8:APA91bEB-8lk3e2wsLGzOBIFVhm-4_2oo13RDpY7BSgMpyUZbgryu8HdzpZn5KqQsKLfw1beNnd8-oSyG46zxWuzT7Go0v_B9-wCg5fh_8gus6BZcqTupi8LjKYZxbY9vEQuYqU7RF6-",
+      },
+      body: JSON.stringify({
+        notification: {
+          body: tiket.idMaquina + " / " + tiket.falla,
+          title: "Tiket Nuevo " + tiket.nombre ,
+        },
+
+        to: "/topics/torre",
+      }),
+    }).then(function (response) {
+      return response.json();
+    });
+  };
+
+
   return (
     <div>
       <ThemeProvider theme={TemaFormu}>
         <Grid container direction="column" justify="center" alignItems="center">
-
-
-
           <Paper
             className={classes.paper}
             elevation={0}
             sx={{ borderRadius: 5 }}
           >
-            
             <Fade
-                  in={prog}
-                  style={{
-                    transitionDelay: "800ms",
-                   position: "absolute",
-                  }}
-                  unmountOnExit
-                  sx={{ marginLeft: 0, marginTop: 17.5 }}
-                >
-                  <CircularProgress size={20} />
-                </Fade>
-           
+              in={prog}
+              style={{
+                transitionDelay: "800ms",
+                position: "absolute",
+              }}
+              unmountOnExit
+              sx={{ marginLeft: 0, marginTop: 17.5 }}
+            >
+              <CircularProgress size={20} />
+            </Fade>
 
             <Grid
               container
@@ -412,20 +447,18 @@ const PasoCuatrof = (props) => {
                 className={classes.rootImagenes}
               >
                 {llenarImagen()}
-                
               </ImageList>
               <Fade
-                  in={progFin}
-                  style={{
-                    transitionDelay: "800ms",
-                   position: "absolute",
-                  }}
-                  unmountOnExit
-                  sx={{ marginLeft: 30, marginTop: 39 }}
-                >
-                  <CircularProgress size={36} />
-                </Fade>
-              
+                in={progFin}
+                style={{
+                  transitionDelay: "800ms",
+                  position: "absolute",
+                }}
+                unmountOnExit
+                sx={{ marginLeft: 30, marginTop: 39 }}
+              >
+                <CircularProgress size={36} />
+              </Fade>
 
               <Grid
                 container
@@ -443,8 +476,6 @@ const PasoCuatrof = (props) => {
                 >
                   SOLICITAR SERVICIO
                 </Button>
-
-                
               </Grid>
             </Grid>
           </Paper>
@@ -490,7 +521,7 @@ const PasoCuatrof = (props) => {
               </Button>
             </Grid>
 
-            <TiketNuevo tiketDetalle={tiketDetalle}  />
+            <TiketDetalleNoEdit tiketDetalle={tiketDetalle} />
           </Grid>
         </Dialog>
       </ThemeProvider>

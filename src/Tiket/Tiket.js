@@ -1,19 +1,19 @@
 import { React, useState, useEffect } from "react";
-import IconCelular from "./../Iconos/iccelular";
-import IconCiudad from "./../Iconos/icciudad";
-import IconEdtEstado from "./../Iconos/icedtestado";
-import IconEdtTecnico from "./../Iconos/icedttecnico";
-import IconEdtEdt from "./../Iconos/icedtedt";
-import IconEdtPrioridad from "./../Iconos/icedtprioridad";
-import IconDireccion from "./../Iconos/icdireccion";
-import IconGrande from "./../Iconos/ictecnigrandetiket";
-import IconCalendar from "./../Iconos/iccalendar";
-import IconTipo from "./../Iconos/ictipo";
-import IconMaquinaTik from "./../Iconos/icmaquitik";
+import IconCelular from "../Iconos/iccelular";
+import IconCiudad from "../Iconos/icciudad";
+import IconEdtEstado from "../Iconos/icedtestado";
+import IconEdtTecnico from "../Iconos/icedttecnico";
+import IconEdtEdt from "../Iconos/icedtedt";
+import IconEdtPrioridad from "../Iconos/icedtprioridad";
+import IconDireccion from "../Iconos/icdireccion";
+import IconGrande from "../Iconos/ictecnigrandetiket";
+import IconCalendar from "../Iconos/iccalendar";
+import IconTipo from "../Iconos/ictipo";
+import IconMaquinaTik from "../Iconos/icmaquitik";
 import IconFalloTik from "../Iconos/icFalloTik";
 import IconTecniTik from "../Iconos/icTecniTik"
 import IconDiagTik from "../Iconos/icDiagTik"
-import IconSolicitante from "./../Iconos/icsolicitante";
+import IconSolicitante from "../Iconos/icsolicitante";
 import fire from "../fire";
 import PasosEdt from "../EdtTiket/PasosEdt";
 import {
@@ -31,7 +31,7 @@ import {
 
 
 
-const Tiket = (props) => {
+const TiketDetalle = (props) => {
   const { tiketDetalle } = props;
   const [diagnosticos, setDiagnosticos] = useState([]);
   const [abrirEditar, setAbrirEditar] = useState(false);
@@ -929,4 +929,4 @@ const Tiket = (props) => {
   );
 };
 
-export default Tiket;
+export default TiketDetalle;

@@ -36,13 +36,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PasosGestion = (props) => {
-  const { manejoCerrarDialogAsig, tiketId } = props;
+  const { cerrarGestion, tiket } = props;
   const [paso, setPaso] = useState(0);
   const [titulo, setTitulo] = useState("");
   const [asignado, setAsignado] = useState("");
   const [comentario, setComentario] = useState("");
   const [tipo, setTipo] = useState("");
   const [prioridad, setPrioridad] = useState(2);
+  const [tecnico,setTecnico] = useState("");
 
   const classes = useStyles();
 
@@ -61,7 +62,7 @@ const PasosGestion = (props) => {
   const mostrarPasos = (paso) => {
     switch (paso) {
       case 0:
-        return <PasoUnoAsignar setAsignado={setAsignado} avanzar={avanzar} />;
+        return <PasoUnoAsignar setAsignado={setAsignado} avanzar={avanzar} cerrarGestion={cerrarGestion} setTecnico={setTecnico}  />;
       case 1:
         return (
           <PasoDosTipo
@@ -77,11 +78,12 @@ const PasosGestion = (props) => {
             asignado={asignado}
             comentario={comentario}
             setComentario={setComentario}
-            manejoCerrarDialogAsig={manejoCerrarDialogAsig}
-            tiketId={tiketId}
+            cerrarGestion={cerrarGestion}
+            tiketId={tiket.id}
             prioridad={prioridad}
             setPrioridad={setPrioridad}
             tipo={tipo}
+            tecnico={tecnico}
           />
         );
     }

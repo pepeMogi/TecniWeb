@@ -3,23 +3,14 @@ import ListaTiketes from "./ListaTiketes";
 import fire from "../fire";
 import { Box, Avatar, Typography, Grid, Skeleton } from "@material-ui/core";
 import IcBodega from "../Iconos/icbodega";
+import CabeceraTecnico from "../Componentes/CabeceraTecnicos";
+import { tecnico } from "../Entidades/tecnico";
 
-class Tecnico {
-  constructor(id, nombre, tipo, img, bodega, correo, celular) {
-    this.id = id;
-    this.nombre = nombre;
-    this.tipo = tipo;
-    this.img = img;
-    this.bodega = bodega;
-    this.correo = correo;
-    this.celular = celular;
-  }
-}
 
-const CargaLab = () => {
+const AgendaLaboral = () => {
   const [open, setOpen] = useState("");
-  const [tecnicosList, setTecnicosList] = useState([]);
-
+  const [tecnicos, setTecnicos] = useState([]);
+/*
   const llenarTecnicos = () => {
     return tecnicosList.map((tecnico) => {
       return (
@@ -173,41 +164,31 @@ const CargaLab = () => {
             justifyContent="center"
             alignItems="center"
           >
-            {/***Aqui Va la Lista****/}
+            
           </Grid>
         </Box>
       );
     });
   };
 
-
+*/
 
 
   useEffect(() => {
-    var hola = new Array();
+
     fire
       .firestore()
       .collection("tecnicos")
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-          var tecnico = new Tecnico(
-            doc.data().id,
-            doc.data().nombre,
-            doc.data().tipo,
-            doc.data().img,
-            doc.data().bodega,
-            doc.data().correo,
-            doc.data().celular
-          );
-
-          hola.push(tecnico);
+      .onSnapshot((snap) =>{
+        var array = [];
+        setTecnicos(array);
+        snap.forEach((doc) =>{
+         var tecni = new tecnico(doc);
+         setTecnicos((array) => array.concat(tecni));
+         array.push(tecni);
         });
-
-        console.log("numero de tecnico " + hola.length);
-        setTecnicosList(hola);
-        setOpen(true);
       });
+
   }, []);
 
   return (
@@ -218,10 +199,16 @@ const CargaLab = () => {
         justifyContent="flex-start"
         alignItems="flex-start"
       >
-        {open ? llenarTecnicos() : mostrarEsqueleto()}
+        
+       {tecnicos.map((tecnico) =>{
+         return(
+           <CabeceraTecnico tecnico={tecnico} />
+         )
+       })} 
+
       </Grid>
     </div>
   );
 };
 
-export default CargaLab;
+export default AgendaLaboral;

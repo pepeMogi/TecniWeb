@@ -46,7 +46,7 @@ const TiketCliente = (props) => {
     setAbrirEditar(false);
   };
 
-  const llenarMaquinas = () => {
+ /* const llenarMaquinas = () => {
     return tiketDetalle.maquinas.map((maquina) => {
       return (
         <div>
@@ -64,7 +64,7 @@ const TiketCliente = (props) => {
         </div>
       );
     });
-  };
+  };*/
 
   const llenarDiagnostico = () => {
     return diagnosticos.map((diag) => {
@@ -528,7 +528,7 @@ const TiketCliente = (props) => {
               </Typography>
             </Grid>
 
-            {tiketDetalle ? llenarMaquinas() : <div></div>}
+            {}
 
             {/****Detalle de Fallo****/}
             <Grid

@@ -1,41 +1,29 @@
 import { React, useState, useEffect } from "react";
-import { Grid, Box, Typography, Dialog, Grow, ThemeProvider } from "@material-ui/core";
-import TikestGlobal from "../Componentes/TiketsGlobal";
+import { Grid, Box, Typography } from "@material-ui/core";
+
 import fire from "../fire";
-import { PARA_LEGALIZAR, TIKETS } from "../constantes";
+
 import { tiket } from "../Entidades/tikets";
-import TiketLeg from "./../Componentes/TiketLeg";
-import PasosLegalizar from "./LegalizarForm/PasosLegalizar";
-import TemaDialog from './../Temas/TemaDialog';
+import TiketLegalizar from "../Componentes/TiketLegalizar";
 
 const TiketsLegalizar = () => {
   const [tikets, setTikets] = useState([]);
-  const [abrir, setAbrir] = useState(false);
-  const [tik,setTik] = useState();
-
-  const abrirLegalizar = (tik) => {
-    setTik(tik);
-    setAbrir(true);
-  };
-
-  const cerrarLegalizar = () => {
-    setAbrir(false);
-  };
+  const [num,setNum] = useState(""); 
 
   useEffect(() => {
-    var array = [];
     fire
       .firestore()
       .collection("tikets")
-      .where("estado", "==", "Para Legalizar")
-      .get()
-      .then((snap) => {
+      .where("estado", "==", "para legalizar")
+      .onSnapshot((snap) => {
+        var array = [];
+        setTikets(array);
         snap.forEach((doc) => {
           var tik = new tiket(doc);
+          setTikets((array) => array.concat(tik));
           array.push(tik);
+          setNum(array.length);
         });
-
-        setTikets(array);
       });
   }, []);
 
@@ -47,8 +35,29 @@ const TiketsLegalizar = () => {
         justify="flex-start"
         alignItems="flex-start"
       >
-        <Box sx={{ width: 250, height: 40, backgroundColor: "#E8E7E7" }}>
-          <Typography>Tines 4 tiketw</Typography>
+        <Box
+          sx={{
+            width: 280,
+            height: 40,
+            backgroundColor: "#FFFFFF",
+            borderRadius: 2,
+            boxShadow: 5,
+            padding: 1,
+            marginLeft: 1,
+            marginBottom: 2
+          }}
+        >
+           <Typography
+                sx={{
+                  fontSize: 15,
+                  color: "#EC1B3B",
+                  fontWeight: 600,
+                  marginLeft: 2,
+                  marginTop: 0.2
+                }}
+              >
+                ( {num} ) Tickets listos para legalizar
+              </Typography>
         </Box>
 
         <Grid
@@ -60,32 +69,12 @@ const TiketsLegalizar = () => {
           {/**llenar tikets****/}
 
           {tikets.map((tik) => {
-            return (
-              <div onClick={(e) => abrirLegalizar(tik)}>
-                <TiketLeg tik={tik} />
-              </div>
-            );
+            return <TiketLegalizar tiket={tik} />;
           })}
         </Grid>
       </Grid>
-
-      {/***Legalizar formulario****/}
-      <ThemeProvider theme={TemaDialog}>
-      <Dialog
-        fullWidth={true}
-        open={abrir}
-        sx={{ justifyContent: "center" }}
-        TransitionComponent={Grow}
-        onClose={(e) => cerrarLegalizar(e)}
-      >
-        <PasosLegalizar tik={tik}/>
-      </Dialog>
-      </ThemeProvider>
     </div>
   );
 };
 
 export default TiketsLegalizar;
-
-
-

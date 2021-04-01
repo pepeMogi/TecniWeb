@@ -16,7 +16,7 @@ export const Completo = (props) => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={siguiente}       
+          onClick={atras}       
           sx={{ marginRight: 7, width: 100 }}
         >
           Atras
@@ -28,7 +28,7 @@ export const Completo = (props) => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={atras}         
+          onClick={siguiente}         
           sx={{ marginLeft: 7, width: 100 }}
         >
           siguiente
@@ -36,4 +36,79 @@ export const Completo = (props) => {
       </Grid>
     </Box>
   );
+};
+
+
+export const CompletoFinal = (props) => {
+  const { final, atras } = props; 
+return (
+  <Box>
+    <Grid
+      container
+      direction="row"
+      justify="space-between"
+      alignItems="flex-start"
+    >
+      {/****Btn Atras****/}
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={atras}       
+        sx={{ marginRight: 7, width: 100 }}
+      >
+        Atras
+      </Button>
+
+      <GloAbajo />
+
+      {/****Btn Siguiente****/}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={final}         
+        sx={{ marginLeft: 7, width: 100 }}
+      >
+        Finalizar
+      </Button>
+    </Grid>
+  </Box>
+);
+};
+
+
+export const Isquierdo = (props) => {
+  const {  atras } = props; 
+return (
+  <Box>
+    <Grid
+      container
+      direction="row"
+      justify="space-between"
+      alignItems="flex-start"
+    >
+      {/****Btn Atras****/}
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={atras}       
+        sx={{ marginRight: 7, width: 100 }}
+      >
+        Atras
+      </Button>
+
+      <GloAbajo />
+
+      {/****Btn Siguiente****/}
+      <Grid item
+       
+       
+                 
+        sx={{ marginLeft: 7, width: 100 }}
+        
+      >
+        
+      </Grid>
+    </Grid>
+  </Box>
+);
 };

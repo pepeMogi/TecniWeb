@@ -18,7 +18,6 @@ import {
   withStyles,
 } from "@material-ui/core/styles";
 import TemaFormu from "../Temas/TemaFormu";
-import TemaDialog from "../Temas/TemaDialog";
 import IcUno from "../Iconos/icuno";
 import IcDos from "../Iconos/icdos";
 import IcTres from "../Iconos/ictres";
@@ -43,6 +42,7 @@ const Pasos = (props) => {
   const [titulo, setTitulo] = useState("");
   const [idCliente, setIdCliente] = useState("");
   const [nombre, setNombre] = useState("");
+  const [solicitante,setSolicitante] = useState("");
   const [email, setEmail] = useState("");
   const [direccion, setDireccion] = useState("");
   const [celular, setCelular] = useState("");
@@ -50,7 +50,7 @@ const Pasos = (props) => {
   const [ciudad, setCiudad] = useState("");
   const [tipo, setTipo] = useState("");
   const [maquinasCliente] = useState([]);
-  const [maquinasSelec] = useState([]);
+  const [maquinaSelec,setMaquinaSelect] = useState("");
   const [falla, setFalla] = useState("");
   const [anexos] = useState([]);
 
@@ -79,6 +79,8 @@ const Pasos = (props) => {
             avanzar={avanzar}
             nombre={nombre}
             setNombre={setNombre}
+            solicitante={solicitante}
+            setSolicitante={setSolicitante}
             email={email}
             setEmail={setEmail}
             direccion={direccion}
@@ -90,11 +92,11 @@ const Pasos = (props) => {
             celularDos={celularDos}
             setCelularDos={setCelularDos}            
             maquinasCliente={maquinasCliente}
-           
+           setSolicitante={setSolicitante}
           />
         );
    
-      case 1:
+      case 1:        
         return (
           <PasoTresf
             avanzar={avanzar}
@@ -111,6 +113,8 @@ const Pasos = (props) => {
             celularDos={celularDos}
             setCelularDos={setCelularDos}
             retroceder={retroceder}
+            solicitante={solicitante}
+            setSolicitante={setSolicitante}
           
           />
         );
@@ -119,7 +123,7 @@ const Pasos = (props) => {
         return (
           <PasoCuatrof
             maquinasCliente={maquinasCliente}
-            maquinasSelec={maquinasSelec}
+            setMaquinaSelect={setMaquinaSelect}
             avanzar={avanzar}
             idCliente={idCliente}
             retroceder={retroceder}
@@ -141,9 +145,10 @@ const Pasos = (props) => {
           celularDos={celularDos}            
           maquinasCliente={maquinasCliente}
           categoria={tipo}
-          maquinasSelec={maquinasSelec}
+          maquinaSelec={maquinaSelec}
           cerrarDialog={cerrarDialog}
           retroceder={retroceder}
+          solicitante={solicitante}
           />
         );
     }
@@ -230,7 +235,7 @@ const Pasos = (props) => {
           </Typography>
         </Grid>
 
-        <Paper className={classes.root} elevation={0} sx={{ marginTop: 7 }}>
+        <Paper className={classes.root}  elevation={0} sx={{ marginTop: 7 }}>
           <Stepper
             activeStep={paso}
             alternativeLabel

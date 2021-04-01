@@ -11,6 +11,7 @@ import {
   Fade,
   CircularProgress,
 } from "@material-ui/core";
+import algoliasearch from "algoliasearch";
 import { React, useRef, useState } from "react";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import fire from "../fire";
@@ -23,6 +24,8 @@ import IcClienteMin from "./../Iconos/icClienteMin";
 import LogoLimpio from "../logolimpio";
 import { ReactEasyNotify, notify } from "react-easy-notify";
 import "react-easy-notify/dist/index.css";
+import { cliente } from "./../Entidades/cliente";
+import { clienteNuevo } from "./../Entidades/clienteNuevo";
 
 /****Para Experiencia de usuario****/
 const options = {
@@ -35,6 +38,78 @@ const options = {
   animationType: "vibration",
 };
 
+const correoEnviado = {
+  type: "success",
+  title: "Se envió enlace a tu correo",
+  status: true,
+  timeout: 10000,
+  message: "Hemos enviado los pasos para recuperar tu contraseña a tu correo",
+  position: "top-right",
+  animationType: "vibration",
+};
+
+const correoMal = {
+  type: "danger",
+  title: "Formato de Correo",
+  status: true,
+  timeout: 6000,
+  message: "El Correo Electronico no corresponde a un formato de correo valido",
+  position: "top-right",
+  animationType: "vibration",
+};
+
+const correoRepetido = {
+  type: "danger",
+  title: "Correo Electronico Repetido",
+  status: true,
+  timeout: 6000,
+  message: "El Correo Electronico ya esta siendo usado por otro usuario",
+  position: "top-right",
+  animationType: "vibration",
+};
+
+const correoGeneral = {
+  type: "danger",
+  title: "Error inesperado",
+  status: true,
+  timeout: 6000,
+  message: "revisa los datos ingresados o tu conexion de internet",
+  position: "top-right",
+  animationType: "vibration",
+};
+
+const correoNoEncontrado = {
+  type: "danger",
+  title: "Correo de Usuario",
+  status: true,
+  timeout: 6000,
+  message:
+    "correo no en contrado, verifique su correo o registrece como cliente",
+  position: "top-right",
+  animationType: "vibration",
+};
+
+const errorEncontrasena = {
+  type: "danger",
+  title: "Contraseña incorrecta",
+  status: true,
+  timeout: 6000,
+  message: "Si olvido su contraseña de click en ¿olvidaste tu contraseña?",
+  position: "top-right",
+  animationType: "vibration",
+};
+
+const errorDesconocido = {
+  type: "danger",
+  title: "Error en Correo y Contraseña",
+  status: true,
+  timeout: 6000,
+  message:
+    "Un error desconocido ocurrio al ingresar a su cuenta, favor comunique se con el administrador",
+  position: "top-right",
+  animationType: "vibration",
+};
+
 const useStyles = makeStyles((theme) => ({
   editDialogLar: {
     height: 40,
@@ -43,28 +118,10 @@ const useStyles = makeStyles((theme) => ({
     padding: 15,
     borderWidth: 10,
   },
-
-  editDialogDir: {
-    height: 42,
+  editDialogRecuperar: {
+    height: 70,
     borderRadius: 10,
-    width: 220,
-    padding: 15,
-    borderWidth: 10,
-  },
-
-  editDialogCiu: {
-    height: 42,
-    borderRadius: 10,
-    width: 114,
-    padding: 15,
-    borderWidth: 10,
-  },
-
-  editDialogPeq: {
-    height: 42,
-    borderRadius: 10,
-    width: 166,
-    padding: 15,
+    marginBottom: 10,
     borderWidth: 10,
   },
 
@@ -150,7 +207,8 @@ const PasoUnof = (props) => {
     ciudad,
     setCiudad,
     maquinasCliente,
-    setIdCliente
+    setIdCliente,
+    setSolicitante,
   } = props;
 
   const [open, setOpen] = useState(false);
@@ -158,6 +216,7 @@ const PasoUnof = (props) => {
   const [emailP, setEmailP] = useState("");
   const [passP, setPassP] = useState("");
   const [passPDos, setPassPDos] = useState("");
+  const [recuperar, setRecuperar] = useState(false);
 
   /*******Experiencia de Usuario********/
 
@@ -184,10 +243,17 @@ const PasoUnof = (props) => {
       switch (e.target.value) {
         case emailP:
           console.log("Eamil");
+
           setInpPassRef();
+
           break;
         case passP:
           console.log("EPass");
+          if (passPDos) {
+            verificarDatos();
+          } else {
+            setInpPassRef();
+          }
           setInpButRef();
           break;
         // para cliente nuevo
@@ -195,15 +261,9 @@ const PasoUnof = (props) => {
           setInpDirRef();
           break;
         case direccion:
-          setInpCiuRef();
-          break;
-        case ciudad:
           setInpCelUnoRef();
           break;
         case celular:
-          setInpCelDosRef();
-          break;
-        case celularDos:
           setInpEmaRef();
           break;
         case emailP:
@@ -213,9 +273,31 @@ const PasoUnof = (props) => {
           setInpPassDosRef();
           break;
         case passPDos:
-          setInpBtnRef();
+          verificarDatos();
           break;
       }
+    }
+  };
+
+  const verificarDatos = () => {
+    console.log("verificando datos");
+    if (passP === passPDos) {
+      if (!nombre) {
+        setInpNomRef();
+      } else if (!direccion) {
+        setInpDirRef();
+      } else if (!celular) {
+        setInpCelUnoRef();
+      } else if (!emailP) {
+        setInpEmaRef();
+      } else if (!passP) {
+        setInpPassRef();
+      } else {
+        crearUsuario();
+      }
+    } else {
+      notify(options);
+      setInpPassRef();
     }
   };
 
@@ -235,11 +317,12 @@ const PasoUnof = (props) => {
     setOpenNew(false);
   };
 
-  const getId = (correo) => {
-    let id = correo.replaceAll(".", "_");
-    let minus = id.replaceAll("@", "-");
-    let path = minus.toLowerCase();
-    return path;
+  const abrirRecuperar = () => {
+    setRecuperar(true);
+  };
+
+  const cerrarRecuperar = () => {
+    setRecuperar(false);
   };
 
   /*******************************
@@ -248,41 +331,65 @@ const PasoUnof = (props) => {
   const LogearUsuario = (e) => {
     e.preventDefault();
     console.log("logenado usuario");
-    setProg(true)
+    setProg(true);
     fire
       .auth()
       .signInWithEmailAndPassword(emailP, passP)
       .then((user) => {
-        var camino = getId(emailP);
         console.log("se encontro algo");
+
         fire
           .firestore()
           .collection("clientes")
-          .doc(camino)
+          .where("email", "==", emailP.toLowerCase())
           .get()
-          .then((cliente) => {
-            setProg(false);
-            console.log("se encontro algo");
-            setNombre(cliente.data().nombre);
-            setEmail(emailP);
-            setDireccion(cliente.data().direccion);
-            setCelular(cliente.data().celular);
-            console.log(cliente.data().celular);
-            setCiudad(cliente.data().ciudad);
-            console.log(cliente.data().celularDos);
-            setCelularDos(cliente.data().celularDos);
-            setIdCliente(cliente.data().id)
+          .then((snap) => {
+            snap.forEach((doc) => {
+              var cli = new cliente(doc);
 
-            llenarMaquinas(camino);
+              setNombre(cli.nombre);
+              setSolicitante(cli.nombre);
+              setEmail(cli.email);
+              setDireccion(cli.direccion);
+              setCelular(cli.celular);
+              setCiudad(cli.ciudad);
+              setIdCliente(cli.id);
+              setProg(false);
+              llenarMaquinas(cli.id);
+            });
           })
           .catch((err) => {
-            alert(err.message);
+            alert(err.code);
             setProg(false);
           });
       })
       .catch((err) => {
-        alert(err.message);
+        console.log(err.code);
         setProg(false);
+
+        switch (err.code) {
+          case "auth/user-not-found":
+            notify(correoNoEncontrado);
+            break;
+          case "auth/wrong-password":
+            notify(errorEncontrasena);
+            break;
+          default:
+            notify(errorDesconocido);
+        }
+      });
+  };
+
+  const recuperarContrasena = () => {
+    fire
+     
+      .auth()
+      .sendPasswordResetEmail(emailP)
+      .then(function () {
+        notify(correoEnviado);
+      })
+      .catch(function (error) {
+        // An error happened.
       });
   };
 
@@ -319,59 +426,104 @@ const PasoUnof = (props) => {
       });
   };
 
+  const client = algoliasearch(
+    "BSGVLDWAAA",
+    "a6a2592069708d0523908a39c1860f24"
+  );
+
+  const index = client.initIndex("clientes");
+
+  const crearClienteAlgolia = (clienteSubir) => {
+    var cliAlgolia = {
+      objectID: clienteSubir.id,
+      email: clienteSubir.email,
+      cc: clienteSubir.cc,
+      celular: clienteSubir.celular,
+      direccion: clienteSubir.direccion + " " + clienteSubir.ciudad,
+      img: clienteSubir.img,
+      nombre: clienteSubir.nombre,
+    };
+
+    index
+      .saveObject(cliAlgolia, {
+        // All the following parameters are optional
+        autoGenerateObjectIDIfNotExist: false,
+        // any other requestOptions
+      })
+      .then((resul) => {
+        console.log("subido a algolia => " + resul);
+      });
+  };
+
   /*******************************
    * Crear Usuario
    */
-  const crearUsuario = (e) => {
-    e.preventDefault();
-
+  const crearUsuario = () => {
     console.log("Creando Usuario");
     console.log(emailP, passP + "creando usuario");
-    if (passP === passPDos) {
-      setProg(true);
-      fire
-        .auth()
-        .createUserWithEmailAndPassword(emailP, passP)
-        .then((user) => {
-          setNombre(nombre);
-          setEmail(emailP);
-          setDireccion(direccion);
-          setCelular(celular);
 
-          var path = getId(emailP);
-          var docData = {
-            id: path,
-            nombre: nombre,
-            email: emailP,
-            direccion: direccion,
-            celular: celular,
-            celularDos: celularDos,
-            ciudad: ciudad,
-            cedula: "",
-          };
+    setProg(true);
+    fire
+      .auth()
+      .createUserWithEmailAndPassword(emailP, passP)
+      .then((user) => {
+        var cliente = new clienteNuevo(
+          new Date().getTime().toString(),
+          nombre,
+          direccion,
+          celular,
+          emailP
+        );
 
-          fire
-            .firestore()
-            .collection("clientes")
-            .doc(path)
-            .set(docData)
-            .then((user) => {
-              setIdCliente(path);
-              manejoCloseNew();
-              setProg(false);
-              avanzar();
-            })
-            .catch((err) => {
-              alert(err.message);
-            });
-        })
-        .catch((err) => {
-          alert(err.message);
-        });
-    } else {
-      notify(options);
-      setInpPassRef();
-    }
+        var clienteSubir = {
+          cc: cliente.cc,
+          celular: cliente.celular,
+          ciudad: cliente.ciudad,
+          direccion: cliente.direccion,
+          email: cliente.email,
+          id: cliente.id,
+          img: cliente.img,
+          nombre: cliente.nombre,
+          rut: cliente.rut,
+        };
+
+        fire
+          .firestore()
+          .collection("clientes")
+          .doc(clienteSubir.id)
+          .set(clienteSubir)
+          .then((user) => {
+            setNombre(nombre);
+            setSolicitante(nombre);
+            setEmail(emailP);
+            setDireccion(direccion);
+            setCelular(celular);
+            setIdCliente(clienteSubir.id);
+
+            manejoCloseNew();
+            setProg(false);
+            crearClienteAlgolia(clienteSubir);
+            avanzar();
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
+      })
+      .catch((err) => {
+        console.log(err.code);
+        switch (err.code) {
+          case "auth/invalid-email":
+            notify(correoMal);
+            break;
+          case "auth/email-already-in-use":
+            notify(correoRepetido);
+            break;
+          default:
+            notify(correoGeneral);
+        }
+
+        setProg(false);
+      });
   };
 
   const classes = useStyles();
@@ -491,7 +643,11 @@ const PasoUnof = (props) => {
                   </Box>
 
                   {/****txt olvidaste yu contraseña****/}
-                  <Typography color="primary" sx={{ margin: 4 }}>
+                  <Typography
+                    color="primary"
+                    sx={{ margin: 4 }}
+                    onClick={() => abrirRecuperar()}
+                  >
                     ¿Olvidaste tu contraseña?
                   </Typography>
 
@@ -610,27 +766,7 @@ const PasoUnof = (props) => {
                         onKeyPress={(e) => escucharTecla(e)}
                         onChange={(e) => setDireccion(e.target.value)}
                         InputProps={{
-                          className: classes.editDialogDir,
-                        }}
-                      />
-                    </Box>
-
-                    {/******Caja para TextFiled de Ciudad */}
-                    <Box
-                      boxShadow={5}
-                      borderRadius={2}
-                      sx={{ marginTop: 3, marginLeft: 2 }}
-                    >
-                      <TextField
-                        label="Ciudad"
-                        variant="outlined"
-                        size="small"
-                        value={ciudad}
-                        inputRef={inpCiuRef}
-                        onKeyPress={(e) => escucharTecla(e)}
-                        onChange={(e) => setCiudad(e.target.value)}
-                        InputProps={{
-                          className: classes.editDialogCiu,
+                          className: classes.editDialogLar,
                         }}
                       />
                     </Box>
@@ -653,36 +789,13 @@ const PasoUnof = (props) => {
                         variant="outlined"
                         required
                         size="small"
-               
                         value={celular}
                         inputRef={inpCelUnoRef}
                         onKeyPress={(e) => escucharTecla(e)}
                         onChange={(e) => setCelular(e.target.value)}
                         InputProps={{
-                          className: classes.editDialogPeq,
+                          className: classes.editDialogLar,
                           shrink: false,
-                        
-                          
-                        }}
-                      />
-                    </Box>
-
-                    {/******Caja para TextFiled de Número de celular Dos */}
-                    <Box
-                      boxShadow={5}
-                      borderRadius={2}
-                      sx={{ marginTop: 3, marginLeft: 2 }}
-                    >
-                      <TextField
-                        label="Celular Dos"
-                        variant="outlined"
-                        size="small"
-                        value={celularDos}
-                        inputRef={inpCelDosRef}
-                        onKeyPress={(e) => escucharTecla(e)}
-                        onChange={(e) => setCelularDos(e.target.value)}
-                        InputProps={{
-                          className: classes.editDialogPeq,
                         }}
                       />
                     </Box>
@@ -745,7 +858,7 @@ const PasoUnof = (props) => {
                     variant="contained"
                     color="primary"
                     ref={inpBtnRef}
-                    onClick={(e) => crearUsuario(e)}
+                    onClick={(e) => verificarDatos(e)}
                     sx={{ height: 34, width: 130, marginTop: 4 }}
                   >
                     Ingresar
@@ -754,6 +867,62 @@ const PasoUnof = (props) => {
                   <IcAbajoMin />
                 </Grid>
               </Paper>
+            </ThemeProvider>
+          </Dialog>
+
+          {/***Recuperar Contraseña****/}
+          <Dialog open={recuperar} onClose={(e) => cerrarRecuperar(e)}>
+            <ThemeProvider theme={TemaFormu}>
+              <Box sx={{ width: 300, padding: 2 }}>
+                <Grid
+                  container
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Typography
+                    sx={{
+                      color: "#EC1B3B",
+                      fontSize: 16,
+                      fontWeight: 500,
+                      marginTop: 2,
+                    }}
+                  >
+                    Escribe tu correo electronico de usuario
+                  </Typography>
+
+                  <Box
+                    boxShadow={5}
+                    borderRadius={2}
+                    paddingLeft={2}
+                    paddingRight={2}
+                    paddingTop={1}
+                    sx={{ width: 240, marginTop: 4 }}
+                  >
+                    <TextField
+                      label="Correo electronico"
+                      variant="standard"
+                      multiline
+                      rows={3}
+                      fullWidth
+                      value={emailP}
+                      onChange={(e) => setEmailP(e.target.value)}
+                      InputProps={{
+                        className: classes.editDialogRecuperar,
+                      }}
+                    />
+                  </Box>
+
+                  <Button
+                    onClick={(e) => recuperarContrasena(e)}
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginTop: 4 }}
+                  >
+                    Continuar
+                  </Button>
+                </Grid>
+              </Box>
             </ThemeProvider>
           </Dialog>
         </ThemeProvider>

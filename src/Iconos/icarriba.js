@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
   root: {},
 }));
 
-const IconAdmin = () => {
+const IconDireccionArriba = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -19,10 +19,10 @@ const IconAdmin = () => {
           id="icarriba"
           d="M458.137-352.152l-.175-.082a.536.536,0,0,0-.712.259l-5.5,11.8-.7,1.5.7,1.5,5.5,11.8a.536.536,0,0,0,.712.259l.175-.082a.536.536,0,0,0,.259-.713l-5.952-12.764L458.4-351.44A.536.536,0,0,0,458.137-352.152Z"
           transform="translate(-325.068 -451.049) rotate(90)"
-          fill="#ec1b3b"
+          fill="#ffffff"
         />
       </svg>
     </div>
   );
 };
-export default IconAdmin;
+export default IconDireccionArriba;

@@ -5,6 +5,7 @@ import fire from "./fire";
 import Loginf from "./Entrada/Loginf";
 import { ReactEasyNotify, notify } from "react-easy-notify";
 import "react-easy-notify/dist/index.css";
+import { tecnico } from "./Entidades/tecnico";
 
 /****Para Experiencia de usuario****/
 const options = {
@@ -103,23 +104,78 @@ const App = () => {
    * admin
    */
   const leerAdmin = (email) => {
+    console.log("leyendo usuario " + email );
     fire
       .firestore()
-      .collection("usuarios")
-      .where("correo", "==", email)
+      .collection("tecnicos")
+      .where("email", "==", email)
       .get()
       .then((snap) => {
         snap.forEach((doc) => {
-          setUsuario(doc.data().rol);
-          setUser(email);
-          
+          var tecni = new tecnico(doc);
+          if (tecni.tipo == "admin") {
+            //setUsuario(doc.data().rol);
+            setUser(email);
+            obtenerToken(tecni);
+          }else{
+            alert("rol de usuario invalido")
+          }
         });
-
-       
       });
   };
 
+  const obtenerToken = (tecni) => {
+    fire
+      .messaging()
+      .getToken({
+        vapidKey:
+          "BM97DtgRhHlVRVTatKr6wKDj8G9QCnNmgtjClV5nFhA1wjx3-5nfQXmEi05wJvLxZw5jKnOBp-6sB3O_MijROyo",
+      })
+      .then((currentToken) => {
+        if (currentToken) {
+          console.log(currentToken);
+          subscribeTokenToTopic(currentToken);
+          actualizarToken(currentToken, tecni);
+        } else {
+          // Show permission request UI
+          console.log(
+            "No registration token available. Request permission to generate one."
+          );
+          // ...
+        }
+      })
+      .catch((err) => {
+        console.log("An error occurred while retrieving token. ", err);
+        // ...
+      });
+  };
 
+  const actualizarToken = (currentToken, tecni) => {
+    fire
+      .firestore()
+      .collection("tecnicos")
+      .doc(tecni.id)
+      .update("token", currentToken)
+      .then(() => {
+        console.log("Notificaciones lista");
+      });
+  };
+
+  const subscribeTokenToTopic = (token) => {
+    fetch('https://iid.googleapis.com/iid/v1/'+token+'/rel/topics/'+"torre", {
+      method: 'POST',
+      headers: new Headers({
+        'Authorization': 'key=AAAAgoHWsk8:APA91bEB-8lk3e2wsLGzOBIFVhm-4_2oo13RDpY7BSgMpyUZbgryu8HdzpZn5KqQsKLfw1beNnd8-oSyG46zxWuzT7Go0v_B9-wCg5fh_8gus6BZcqTupi8LjKYZxbY9vEQuYqU7RF6-'
+      })
+    }).then(response => {
+      if (response.status < 200 || response.status >= 400) {
+        throw 'Error subscribing to topic: '+response.status + ' - ' + response.text();
+      }
+      console.log('Subscribed to  torre');
+    }).catch(error => {
+      console.error(error);
+    })
+  }
 
   /****************************************************
    * Escuchar logeo:
@@ -143,7 +199,9 @@ const App = () => {
 
   return (
     <div>
-      {true ? ( <Main salirLoging={salirLoging} user={user} />): (
+      {user ? (
+        <Main salirLoging={salirLoging} user={user} />
+      ) : (
         <Loginf
           email={email}
           setEmail={setEmail}

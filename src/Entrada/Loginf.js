@@ -27,7 +27,8 @@ import DataLottie from "../Anim/load.json";
 import Pasosf from "../FNServicio/Pasosf";
 import { ReactEasyNotify, notify } from "react-easy-notify";
 import "react-easy-notify/dist/index.css";
-import Tiket from '../Tiket/TiketCliente';
+import TiketDetalleNoEdit from "../Componentes/TiketsDetalle/TiketDetalleNoEdit";
+import { tiket } from "./../Entidades/tikets";
 
 /****Para Experiencia de usuario****/
 const options = {
@@ -98,7 +99,7 @@ const Login = (props) => {
   const [abrirNT, setAbrirNT] = useState(false);
   const [opentiket, setOpenTiket] = useState(false);
   const [numTiket, setNumTiket] = useState("");
-  const [tiket, setTiket] = useState("");
+  const [tiketAqui, setTiketAqui] = useState("");
   const [openNew, setOpenNew] = useState("");
   const [user, setUser] = useState("");
 
@@ -167,6 +168,11 @@ const Login = (props) => {
     setOpen(false);
   };
 
+  
+  const imprimir = () => {
+    window.print();
+  };
+
   /*******************************************
    * Manejo de Clikc abrir:
    * maneja el evento de abrir el dialogo
@@ -205,7 +211,6 @@ const Login = (props) => {
     setOpenDialog(false);
   };
 
-
   /************************************************
    * consultar tikets:
    * verifica si numTiket tiene un valor, consulta
@@ -227,61 +232,10 @@ const Login = (props) => {
         .collection("tikets")
         .doc(numero)
         .get()
-        .then((tik) => {
-          if (tik.exists) {
-
-            const months = [
-              "ENE",
-              "FEB",
-              "MAR",
-              "ABR",
-              "MAY",
-              "JUN",
-              "JUL",
-              "AGO",
-              "SEP",
-              "OCT",
-              "NOV",
-              "DIC",
-            ];
-            let current_datetime = tik.data().fechaCreacion.toDate();
-            let formatted_date =
-              current_datetime.getDate() +
-              "-" +
-              months[current_datetime.getMonth()] +
-              "-" +
-              current_datetime.getFullYear();
-  
-            var tikete = {
-              id: tik.data().id,
-              numero: tik.data().id,
-              nombre: tik.data().nombre,
-              tipo: tik.data().tipo,
-              fechaCreacion: formatted_date,
-              estado: tik.data().estado,
-              direccion: tik.data().direccion,
-              celular: tik.data().numero,
-              ciudad: tik.data().cuidad,
-              factura: tik.data().factura,
-              maquinas: tik.data().maquinas,
-              falla: tik.data().falla,
-              asignado: tik.data().asignado,
-              email: tik.data().email,
-              anexos: tik.data().anexos,
-              idCliente: tik.data().idCliente,
-              legalizacion: tik.data().legalizacion,
-              fecTimestamp: tik.data().fechaCreacion,
-              
-            };
-  
-            console.log(tikete.maquinas);
-           
-
-
-            setTiketeDetalle(tikete);
-
-
-
+        .then((doc) => {
+          if (doc.exists) {
+            var tik = new tiket(doc);
+            setTiketeDetalle(tik);
 
             handleClickOpenTiket();
           } else {
@@ -321,7 +275,8 @@ const Login = (props) => {
       <ReactEasyNotify />
       {/****Anim Cargando */}
 
-      {cargando ? (
+      {/***pendiente retirar****/}
+      {false ? (
         <Lottie
           options={defaultOptions}
           height={350}
@@ -599,14 +554,38 @@ const Login = (props) => {
           <Pasosf cerrarDialog={cerrarDialog} />
         </Dialog>
       </ThemeProvider>
-  
-     {/****Dialog Consultar Tiket****/}
+
+      {/****Dialog Consultar Tiket****/}
       <ThemeProvider theme={TemaDialog}>
         <Dialog open={openDialog} onClose={manejoCerrarDialog}>
-          <Tiket tiketDetalle={tiketDetalle} />
+        <ThemeProvider theme={TemaFormu}>
+        <Grid container direction="column" padding={2} justify="center">
+            <Grid
+              container
+              direction="row-reverse"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              
+
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={(e) => imprimir(e)}
+              >
+                Imprimir
+              </Button>
+            </Grid>
+
+            <TiketDetalleNoEdit tiketDetalle={tiketDetalle} />
+          </Grid>
+          </ThemeProvider>
         </Dialog>
+       
+
+
+        
       </ThemeProvider>
-  
     </div>
   );
 };

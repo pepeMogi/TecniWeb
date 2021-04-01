@@ -12,8 +12,7 @@ import TemaFormu from "./../../Temas/TemaFormu";
 import { Completo } from "./../../Componentes/NavegaFormu";
 
 const PasoDosRepuestos = (props) => {
-  const { avanzar, retroceder, tik, diagnosticoLocal } = props;
-  const [repuestos, setRepuestos] = useState([]);
+  const { avanzar, retroceder, diagnosticoLocal } = props;  
   const [repFacturar, setRepFacturar] = useState([]);
   const [repCotizacion, setRepCotizacion] = useState([]);
   const [repGarantia, setRepGarantia] = useState([]);
@@ -43,6 +42,119 @@ const PasoDosRepuestos = (props) => {
       </Box>
     );
   };
+
+  const llenarFacturar = () => {
+    return (
+      <div>
+        <Box sx={{ borderRadius: 1, boxShadow: 2, padding: 1.5, width: 500, marginBottom: 2 }}>
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontStyle: "italic",
+              fontWeight: 500,
+              color: "#EC1B3B",
+              marginBottom: 1,
+            }}
+          >
+            Para facturar
+          </Typography>
+
+          {repFacturar.map((rep) => {
+            return (
+              <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center"
+                sx={{ marginTop: -2 }}
+              >
+                <Typography sx={{ width: 430, fontSize: 14, fontWeight: 500 }}>
+                  {rep.substring(3)}
+                </Typography>
+                <Checkbox />
+              </Grid>
+            );
+          })}
+        </Box>
+      </div>
+    );
+  };
+
+
+  const llenarGarantia = () => {
+    return (
+      <div>
+        <Box sx={{ borderRadius: 1, boxShadow: 2, padding: 1.5, width: 500, marginBottom: 2 }}>
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontStyle: "italic",
+              fontWeight: 500,
+              color: "#EC1B3B",
+              marginBottom: 1,
+            }}
+          >
+            Por garantia
+          </Typography>
+
+          {repGarantia.map((rep) => {
+            return (
+              <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center"
+                sx={{ marginTop: -2 }}
+              >
+                <Typography sx={{ width: 430, fontSize: 14, fontWeight: 500 }}>
+                  {rep.substring(3)}
+                </Typography>
+                <Checkbox />
+              </Grid>
+            );
+          })}
+        </Box>
+      </div>
+    );
+  };
+
+  const llenarCotizacion = () => {
+    return (
+      <div>
+        <Box sx={{ borderRadius: 1, boxShadow: 2, padding: 1.5, width: 500, marginBottom: 2 }}>
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontStyle: "italic",
+              fontWeight: 500,
+              color: "#EC1B3B",
+              marginBottom: 1,
+            }}
+          >
+            Por cotizacion
+          </Typography>
+
+          {repCotizacion.map((rep) => {
+            return (
+              <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center"
+                sx={{ marginTop: 0.8 }}
+              >
+                <Typography sx={{ width: 430, fontSize: 14, fontWeight: 500 }}>
+                  {rep.substring(3)}
+                </Typography>                
+              </Grid>
+            );
+          })}
+        </Box>
+      </div>
+    );
+  };
+
+
 
   useEffect(() => {
     var facurar = [];
@@ -79,41 +191,20 @@ const PasoDosRepuestos = (props) => {
             sx={{ borderRadius: 5, width: 500, height: 330 }}
           >
             <Grid
-         container
-         direction="column"
-         justify="flex-start"
-         alignItems="flex-start"
+              container
+              direction="column"
+              justify="flex-start"
+              alignItems="flex-start"
             >
               {/***Contenido de Formulario****/}
 
-              {repFacturar.length > 0 ? "hola" : ""}
-              {repFacturar.map((rep) => {
-                return (
-                  <Box sx={{ boxShadow: 2, padding: 1, borderRadius: 1 }}>
-                    <Typography>{rep}</Typography>
-                  </Box>
-                );
-              })}
+              {repFacturar.length > 0 ? llenarFacturar() : ""}
 
-              {repGarantia.length > 0 ? "hola" : ""}
-              {repGarantia.map((rep) => {
-                return (
-                  <Box sx={{ boxShadow: 2, padding: 1, borderRadius: 1 }}>
-                    <Typography>{rep}</Typography>
-                  </Box>
-                );
-              })}
+              {repGarantia.length > 0 ? llenarGarantia() : ""}
+           
 
-              
-
-              {repCotizacion.length > 0 ? "hola" : ""}
-              {repCotizacion.map((rep) => {
-                return (
-                  <Box sx={{ boxShadow: 2, padding: 1, borderRadius: 1 }}>
-                    <Typography>{rep}</Typography>
-                  </Box>
-                );
-              })}
+              {repCotizacion.length > 0 ? llenarCotizacion() : ""}
+             
             </Grid>
           </Paper>
 

@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 const PasoCuatrof = (props) => {
   const {
     maquinasCliente,
-    maquinasSelec,
+    setMaquinaSelect,
     avanzar,
     idCliente,
     retroceder,
@@ -99,11 +99,7 @@ const PasoCuatrof = (props) => {
                 {maquina.modelo}
               </Typography>
 
-              <Checkbox
-                edge="end"
-                value={maquina.id}
-                onChange={(e) => manejoArray(e.target.checked, e.target.value)}
-              />
+              
             </Grid>
           </Box>
         </ListItem>
@@ -111,16 +107,7 @@ const PasoCuatrof = (props) => {
     });
   };
 
-  const llenarReferencia = (e) => {
-    e.preventDefault();
-    if (referencia) {
-      maquinasSelec.push("REFERENCIA : " + referencia);
-      manejoDialogoCerrar();
-      avanzar();
-    } else {
-      alert("sin ninguna referencia");
-    }
-  };
+ 
 
   const manejoDialogoCerrar = () =>{
     setDiaRef(false);
@@ -130,28 +117,7 @@ const PasoCuatrof = (props) => {
     setDiaRef(true);
   }
 
-  const manejoArray = (escogida, maquina) => {
-    if (!inactivo) {
-      setInActivo(true);
-    }
-
-    if (escogida) {
-      console.log("se agrego " + maquina);
-      maquinasSelec.push(maquina);
-      setSiguiente(false);
-    } else {
-      let pos = maquinasSelec.indexOf(maquina);
-      if (pos != null) {
-        maquinasSelec.splice(pos, 1);
-        console.log("se quito " + maquina);
-
-        if (maquinasSelec.length == 0) {
-          setInActivo(false);
-          setSiguiente(true);
-        }
-      }
-    }
-  };
+ 
 
   const getIdMaquina = () => {
     var num = "";
@@ -166,34 +132,7 @@ const PasoCuatrof = (props) => {
     return id.replaceAll(" ", "_");
   };
 
-  const crearMaquina = (e) => {
-    e.preventDefault();
 
-    var id = getIdMaquina();
-    var docData = {
-      id: id,
-      marca: marca,
-      modelo: modelo,
-      contadorBN: contadorBN ? contadorBN : "0",
-      contadorColor: contadorColor ? contadorColor : "0",
-      serial: serial ? serial : "0",
-      cliente: idCliente,
-    };
-
-    fire
-      .firestore()
-      .collection("maquinas")
-      .doc(id)
-      .set(docData)
-      .then((doc) => {
-        maquinasSelec.push(id);
-        avanzar();
-        manejoCerra();
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  };
 
   const manejoAbrir = (e) => {
     e.preventDefault();
@@ -203,6 +142,21 @@ const PasoCuatrof = (props) => {
   const manejoCerra = (e) => {
     setOpen(false);
   };
+
+  const llenarNoReferencia = (e) =>{
+    e.preventDefault()
+    setMaquinaSelect("REF: sin referencia");
+    avanzar()
+
+  }
+
+  const llenarReferencia = (e) =>{
+    e.preventDefault();
+    setMaquinaSelect("REF: " + referencia);
+    setDiaRef(false);
+    avanzar()
+    
+  }
 
   const classes = useStyles();
   return (
@@ -234,7 +188,7 @@ const PasoCuatrof = (props) => {
                   variant="contained"
                   color="primary"
                   disabled={inactivo}
-                  onClick={avanzar}
+                  onClick={(e) => llenarNoReferencia(e)}
                   className={classes.boton}
                   sx={{
                     marginTop: 3,
@@ -345,6 +299,8 @@ const PasoCuatrof = (props) => {
             </Grid>
           </Box>
         </Dialog>
+     
+     
       </ThemeProvider>
     </div>
   );

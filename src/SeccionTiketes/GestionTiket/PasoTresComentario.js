@@ -1,16 +1,10 @@
-import {
-  TextField,
-  Grid,
-  Button,
-  Paper,
-  Box,  
-  Slider,
-} from "@material-ui/core";
+import { TextField, Grid, Button, Paper, Box, Slider } from "@material-ui/core";
 import { React } from "react";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import fire from "../../fire";
 import TemaFormu from "../../Temas/TemaFormu";
-import IcAbajoCinco from "../../Iconos/icFabajoCinco";
+import { Isquierdo } from "../../Componentes/NavegaFormu";
+import algoliasearch from 'algoliasearch';
 
 const useStyles = makeStyles((theme) => ({
   editDialog: {
@@ -54,13 +48,12 @@ const PasoTresComentario = (props) => {
     comentario,
     setComentario,
     tiketId,
-    manejoCerrarDialogAsig,
+    cerrarGestion,
     prioridad,
     setPrioridad,
-    tipo
+    tipo,
+    tecnico,
   } = props;
-
-  
 
   const classes = useStyles();
 
@@ -88,6 +81,51 @@ const PasoTresComentario = (props) => {
     },
   ];
 
+  const enviarNotificacion = () => {
+    console.log("enviando notificacion...");
+
+    fetch("https://fcm.googleapis.com/fcm/send", {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization:
+          "key=AAAAgoHWsk8:APA91bEB-8lk3e2wsLGzOBIFVhm-4_2oo13RDpY7BSgMpyUZbgryu8HdzpZn5KqQsKLfw1beNnd8-oSyG46zxWuzT7Go0v_B9-wCg5fh_8gus6BZcqTupi8LjKYZxbY9vEQuYqU7RF6-",
+      },
+      body: JSON.stringify({
+        notification: {
+          body: comentario,
+          title: "Servicio Asignado " + tiketId.toUpperCase(),
+        },
+
+        to: tecnico.token,
+      }),
+    }).then(function (response) {
+      return response.json();
+    });
+  };
+
+  const actualizaMotor = () => {
+
+    const client = algoliasearch("BSGVLDWAAA", "a6a2592069708d0523908a39c1860f24");
+    const index = client.initIndex("tikets");
+
+    const objects = [
+      {
+        asignado: asignado,
+        tipo: tipo,
+        estado: "asignado",
+        objectID: tiketId,
+        prioridad: prioridad
+      },
+    ];
+
+    index.partialUpdateObjects(objects).then(({ objectIDs }) => {
+      cerrarGestion();
+    });
+  };
+
   const subirAsignacion = () => {
     fire
       .firestore()
@@ -96,12 +134,13 @@ const PasoTresComentario = (props) => {
       .update({
         asignado: asignado,
         estado: "asignado",
-        comentario: comentario,
         prioridad: prioridad,
-        tipo: tipo
+        tipo: tipo,
       })
       .then(() => {
-        manejoCerrarDialogAsig();
+        enviarNotificacion();
+
+        actualizaMotor();
       })
       .catch((err) => {
         alert(err);
@@ -144,7 +183,7 @@ const PasoTresComentario = (props) => {
                 />
               </Box>
 
-              <Slider                
+              <Slider
                 valueLabelDisplay="auto"
                 step={1}
                 marks
@@ -153,7 +192,7 @@ const PasoTresComentario = (props) => {
                 min={1}
                 max={5}
                 marks={marks}
-                sx={{ marginLeft: 4, marginRight: 4, marginTop: 6 }}
+                sx={{ marginLeft: 4, marginRight: 4, marginTop: 4 }}
               />
 
               <Grid
@@ -168,32 +207,19 @@ const PasoTresComentario = (props) => {
                   color="primary"
                   onClick={(e) => subirAsignacion(e)}
                   className={classes.boton}
-                  sx={{ marginTop: 0, fontSize: 14, marginTop: 6 }}
+                  sx={{
+                    marginTop: 0,
+                    fontSize: 14,
+                    marginTop: 4,
+                    marginBottom: 3,
+                  }}
                 >
                   Terminar
                 </Button>
               </Grid>
+              <Isquierdo atras={retroceder} />
             </Grid>
           </Paper>
-        </Grid>
-
-        <Grid
-          container
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-        >
-          {/****Btn Atras****/}
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={retroceder}
-            className={classes.botonAtras}
-            sx={{ marginTop: 0, fontSize: 14, marginLeft: 6 }}
-          >
-            Atras
-          </Button>
-          <IcAbajoCinco />
         </Grid>
       </ThemeProvider>
     </div>

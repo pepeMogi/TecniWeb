@@ -17,6 +17,7 @@ import {
 import TemaFormu from "../../Temas/TemaFormu";
 import PasoUnoDiagnosticos from "./PasoUnoDiagnosticos";
 import PasoDosRepuestos from "./PasoDosRepuestos";
+import PasoTresFacturacion from './PasoTresFacturacion';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PasosLegalizar = (props) => {
-  const { tik } = props;
+  const { tiket } = props;
   const [paso, setPaso] = useState(0);
   const [titulo, setTitulo] = useState("");
   const [diagnosticoLocal, setDiagnosticoLocal] = useState();
@@ -40,7 +41,7 @@ const PasosLegalizar = (props) => {
   const classes = useStyles();
 
   const avanzar = () => {
-    if (paso < 4) {
+    if (paso < 3) {
       setPaso(paso + 1);
     }
   };
@@ -56,14 +57,22 @@ const PasosLegalizar = (props) => {
       case 0:
         return (
           <PasoUnoDiagnosticos
-            tik={tik}
+            tiket={tiket}
             setDiagnosticoLocal={setDiagnosticoLocal}
             avanzar={avanzar}
             retroceder={retroceder}
           />
         );
       case 1:
-        return <PasoDosRepuestos diagnosticoLocal={diagnosticoLocal} />;
+        return (
+          <PasoDosRepuestos
+            diagnosticoLocal={diagnosticoLocal}
+            avanzar={avanzar}
+            retroceder={retroceder}
+          />
+        );
+      case 2:
+        return <PasoTresFacturacion diagnosticoLocal={diagnosticoLocal} tiket={tiket} />;
     }
   };
 
@@ -90,36 +99,16 @@ const PasosLegalizar = (props) => {
     },
   })(StepConnector);
 
-  const IconoTitulo = (paso) => {
-    switch (paso) {
-      case 0:
-        return;
-        break;
-      case 1:
-        return;
-        break;
-      case 2:
-        return;
-        break;
-      case 3:
-        return;
-        break;
-    }
-  };
-
   useEffect(() => {
     switch (paso) {
       case 0:
-        setTitulo("Solicitud de Servicio - Ticket");
+        setTitulo("Reporte Tecnico");
         break;
       case 1:
-        setTitulo("Datos del Solicitante");
+        setTitulo("Repuestos Utilizados");
         break;
       case 2:
-        setTitulo("Maquina a Revisar");
-        break;
-      case 3:
-        setTitulo("Detalles del fallo");
+        setTitulo("Facturacion");
         break;
     }
   }, [paso]);
@@ -134,7 +123,6 @@ const PasosLegalizar = (props) => {
           alignItems="center"
           sx={{ marginTop: 4 }}
         >
-          {IconoTitulo(paso)}
           <Typography
             variant="h6"
             align="center"
@@ -154,14 +142,6 @@ const PasosLegalizar = (props) => {
           >
             <Step>
               <StepLabel icon={" "}></StepLabel>
-            </Step>
-            <Step>
-              <StepLabel
-                icon={" "}
-                StepIconProps={{
-                  classes: { root: classes.stepIcon },
-                }}
-              ></StepLabel>
             </Step>
             <Step>
               <StepLabel

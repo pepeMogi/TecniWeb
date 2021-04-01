@@ -68,7 +68,11 @@ const PasoTresf = (props) => {
     celularDos,
     setCelularDos,
     retroceder,
+    solicitante,
+    setSolicitante,
   } = props;
+
+  
 
   const verificar = () =>{
 
@@ -103,8 +107,8 @@ const PasoTresf = (props) => {
                   variant="outlined"
                   size="small"
                   required
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
+                  value={solicitante}
+                  onChange={(e) => setSolicitante(e.target.value)}
                   InputProps={{
                     className: classes.editDialog,
                   }}
