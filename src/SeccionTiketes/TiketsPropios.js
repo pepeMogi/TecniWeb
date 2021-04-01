@@ -21,41 +21,13 @@ import Iconorellamada from "../Iconos/iconorellamada";
 import Iconourgente from "../Iconos/iconourgente";
 import Iconomedia from "../Iconos/iconomedia";
 import Iconobaja from "../Iconos/iconobaja";
+import { tiket } from "./../Entidades/tikets";
 
-
-
-
-
-const getFecha = (times) => {
-  const months = [
-    "Ene",
-    "Feb",
-    "Mar",
-    "Abr",
-    "May",
-    "Jun",
-    "Jul",
-    "Ago",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dic",
-  ];
-  let current_datetime = times.toDate();
-  let formatted_date =
-    current_datetime.getDate() +
-    "-" +
-    months[current_datetime.getMonth()] +
-    "-" +
-    current_datetime.getFullYear();
-
-  return formatted_date;
-};
-
-const TikestPropios = () => {
+const TikestPropios = (props) => {
+  const { admin } = props;
   const [tikets, setTikets] = useState([]);
   const [openDiagnostico, setOpenDiagnostico] = useState(false);
-  const [tiketDiag,setTiketDiag] = useState("");
+  const [tiketDiag, setTiketDiag] = useState("");
   const [num, setNum] = useState("");
 
   const manejoDiagnostico = (tik) => {
@@ -63,17 +35,8 @@ const TikestPropios = () => {
     setOpenDiagnostico(true);
   };
 
-  
   const Tikets = (props) => {
     const { tik } = props;
-
-    var text = "";
-    for (var i = 0; i < tik.maquinas.length; i++) {
-      text += tik.maquinas[0] + "\n";
-    }
-     for (var i = 0; i < tik.maquinas.length; i++) {
-      text += tik.maquinas[0] + "\n";
-    }
 
     return (
       <div>
@@ -85,439 +48,424 @@ const TikestPropios = () => {
             marginTop: 2,
             marginLeft: 2,
             padding: 2,
-            bgcolor: "rgb(200,200,200)"
+            bgcolor: "rgb(200,200,200)",
           }}
         >
           {/* GRID CONTENEDOR DE LA CARD */}
-          <Grid container >
+          <Grid container>
             {/*8 FILAS CADA UNA CON  DIVICION DE 2 COLUMNAS PARA POSICIONAR TITULOS Y VARIABLES  */}
-           
+
             {/* FILA 1 CODIGO  Y PRIORIDAD*/}
-            <Grid item xs={5}>     
+            <Grid item xs={5}>
               <Box
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',                        
+                  display: "flex",
+                  alignItems: "center",
                 }}
-              >                                                                                          
-                <Typography 
+              >
+                <Typography
                   sx={{
-                    fontWeight: 'medium',
+                    fontWeight: "medium",
                     fontSize: "15px",
-                    display: 'inline',
-                    margin:"0px",
+                    display: "inline",
+                    margin: "0px",
                     marginLeft: "14px",
-                    color: "red"
+                    color: "red",
                   }}
-                >{tik.id}
+                >
+                  {tik.id}
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={7} >
-                <Box
+            <Grid item xs={7}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <Typography
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',                    
+                    display: "inline",
+                    margin: "0px",
+                    fontSize: "16px",
+                    color: "red",
                   }}
                 >
-                  
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      fontSize: "16px",
-                      color: "red"
-                    }}
-                  >
-                     Prioridad
-                  </Typography>
-                </Box>               
-            </Grid>         
-            
+                  Prioridad
+                </Typography>
+              </Box>
+            </Grid>
+
             {/* FILA 2 MANTENIMIENTO  Y CIRCULO DE COLOR*/}
-            <Grid item xs={5}>     
+            <Grid item xs={5}>
               <Box
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',                        
+                  display: "flex",
+                  alignItems: "center",
                 }}
-              >                                                                                          
-                <Typography 
+              >
+                <Typography
                   sx={{
-                    fontWeight: 'medium',
+                    fontWeight: "medium",
                     fontSize: "15px",
-                    display: 'inline',
-                    margin:"0px",
+                    display: "inline",
+                    margin: "0px",
                     marginLeft: "14px",
-                    color: "red"
+                    color: "red",
                   }}
-                >Mantenimiento
+                >
+                  Mantenimiento
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={7} >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',                    
-                  }}
-                >
-                  {tik.nombre == "Luis Rosero1" ? <Iconorellamada></Iconorellamada>
-                    : tik.nombre == "Luis Rosero"?  <Iconourgente></Iconourgente>
-                    : tik.nombre == "Luis Rosero2"?  <Iconomedia></Iconomedia>
-                    : <Iconobaja></Iconobaja> 
-                  }
-                </Box>               
-            </Grid>         
-            
+            <Grid item xs={7}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                {tik.nombre == "Luis Rosero1" ? (
+                  <Iconorellamada></Iconorellamada>
+                ) : tik.nombre == "Luis Rosero" ? (
+                  <Iconourgente></Iconourgente>
+                ) : tik.nombre == "Luis Rosero2" ? (
+                  <Iconomedia></Iconomedia>
+                ) : (
+                  <Iconobaja></Iconobaja>
+                )}
+              </Box>
+            </Grid>
+
             {/*FILA 3 CLIENTE  */}
-            <Grid item xs={5}>     
-              <Box pt={2}
+            <Grid item xs={5}>
+              <Box
+                pt={2}
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',                        
+                  display: "flex",
+                  alignItems: "center",
                 }}
-              >                        
+              >
                 <Iconopersona
                   sx={{
-                    display: 'inline',
-                    margin:"0px"
+                    display: "inline",
+                    margin: "0px",
                   }}
-                ></Iconopersona>                                                                  
-                <Typography 
+                ></Iconopersona>
+                <Typography
                   sx={{
-                    fontWeight: 'medium',
+                    fontWeight: "medium",
                     fontSize: "15px",
-                    display: 'inline',
-                    margin:"0px",
-                    marginLeft: "10px"
+                    display: "inline",
+                    margin: "0px",
+                    marginLeft: "10px",
                   }}
-                >Cliente:
+                >
+                  Cliente:
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={7} >
-                <Box pt={2}
+            <Grid item xs={7}>
+              <Box
+                pt={2}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',                    
+                    display: "inline",
+                    margin: "0px",
+                    paddingTop: "1px",
+                    fontSize: "16px",
                   }}
                 >
-                  
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      paddingTop:"1px",
-                      fontSize: "16px"
-                    }}
-                  >
-                     {tik.nombre}
-                  </Typography>
-                </Box>               
-            </Grid>         
-            
+                  {tik.nombre}
+                </Typography>
+              </Box>
+            </Grid>
+
             {/* FILA 4 SOLICITANTE */}
-            <Grid item xs={5}>     
-              <Box pt={2}
+            <Grid item xs={5}>
+              <Box
+                pt={2}
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',                        
+                  display: "flex",
+                  alignItems: "center",
                 }}
-              >                        
+              >
                 <Iconopersona
                   sx={{
-                    display: 'inline',
-                    margin:"0px"
+                    display: "inline",
+                    margin: "0px",
                   }}
-                ></Iconopersona>                                                                  
-                <Typography 
+                ></Iconopersona>
+                <Typography
                   sx={{
-                    fontWeight: 'medium',
+                    fontWeight: "medium",
                     fontSize: "15px",
-                    display: 'inline',
-                    margin:"0px",
-                    marginLeft: "10px"
+                    display: "inline",
+                    margin: "0px",
+                    marginLeft: "10px",
                   }}
-                >Solicitante:
+                >
+                  Solicitante:
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={7} >
-                <Box pt={2}
+            <Grid item xs={7}>
+              <Box
+                pt={2}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',                    
+                    display: "inline",
+                    margin: "0px",
+                    fontSize: "16px",
                   }}
                 >
-                  
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      fontSize: "16px"
-                    }}
-                  >
-                    no hay nada
-                  </Typography>
-                </Box>               
+                  no hay nada
+                </Typography>
+              </Box>
             </Grid>
 
             {/* FILA 5 MAQUINA */}
             <Grid item xs={5}>
-              <Box pt={2}
+              <Box
+                pt={2}
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',                                          
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 <Iconomaquina
                   sx={{
-                    display: 'inline',
-                    margin:"0px"
+                    display: "inline",
+                    margin: "0px",
+                  }}
+                ></Iconomaquina>
+                <Typography
+                  sx={{
+                    fontWeight: "medium",
+                    fontSize: "15px",
+                    display: "inline",
+                    margin: "0px",
+                    marginLeft: "10px",
                   }}
                 >
-                </Iconomaquina>                                                                 
-                <Typography 
-                  sx={{
-                    fontWeight: 'medium',
-                    fontSize: "15px",
-                    display: 'inline',
-                    margin:"0px",
-                    marginLeft: "10px"
-                  }}
-                >Maquina:
+                  Maquina:
                 </Typography>
-
               </Box>
             </Grid>
-            <Grid item xs={7} >
-                <Box pt={2}
+            <Grid item xs={7}>
+              <Box
+                pt={2}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  // overflow: 'auto'  //  Posible scroll si el nombre es muy largo
+                }}
+              >
+                <Typography
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center', 
-                    // overflow: 'auto'  //  Posible scroll si el nombre es muy largo             
+                    display: "inline",
+                    margin: "0px",
+                    fontSize: "16px",
                   }}
                 >
-                  
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      fontSize: "16px"
-                      
-                    }}
-                  >
-                    {text}
-                  </Typography>
-                </Box>               
+                  {tik.idMaquina}
+                </Typography>
+              </Box>
             </Grid>
 
             {/* FILA 6 FALLA */}
             <Grid item xs={5}>
-              <Box pt={2}
+              <Box
+                pt={2}
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',                                       
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 <Iconofalla
                   sx={{
-                    display: 'inline',
-                    margin:"0px"            
+                    display: "inline",
+                    margin: "0px",
+                  }}
+                ></Iconofalla>
+
+                <Typography
+                  sx={{
+                    fontWeight: "medium",
+                    fontSize: "15px",
+                    display: "inline",
+                    margin: "0px",
+                    marginLeft: "10px",
                   }}
                 >
-                </Iconofalla>
-                                                                                 
-                <Typography 
-                  sx={{
-                    fontWeight: 'medium',
-                    fontSize: "15px",
-                    display: 'inline',
-                    margin: "0px",
-                    marginLeft: "10px"
-                  }}
-                >Falla:
+                  Falla:
                 </Typography>
-
               </Box>
             </Grid>
-            <Grid item xs={7} >
-                <Box pt={2}
+            <Grid item xs={7}>
+              <Box
+                pt={2}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',                    
+                    display: "inline",
+                    margin: "0px",
+                    fontSize: "16px",
                   }}
                 >
-                  
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      fontSize: "16px"
-                    }}
-                  >
-                   {tik.falla}
-                  </Typography>
-                </Box>               
+                  {tik.falla}
+                </Typography>
+              </Box>
             </Grid>
-           
+
             {/* FILA 7 ARCHIVOS  */}
             <Grid item xs={5}>
-              <Box pt={2}
+              <Box
+                pt={2}
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                                          
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 <Iconoarchivo
                   sx={{
-                    display: 'inline',
-                    margin:"0px"
-                  }}  
-                >
-                </Iconoarchivo>                                                                  
-                <Typography 
-                  sx={{
-                    fontWeight: 'medium',
-                    fontSize: "15px",
-                    display: 'inline',
-                    margin:"0px",
-                    marginLeft: "10px"
+                    display: "inline",
+                    margin: "0px",
                   }}
-                >Archivos:
+                ></Iconoarchivo>
+                <Typography
+                  sx={{
+                    fontWeight: "medium",
+                    fontSize: "15px",
+                    display: "inline",
+                    margin: "0px",
+                    marginLeft: "10px",
+                  }}
+                >
+                  Archivos:
                 </Typography>
-
               </Box>
             </Grid>
-            <Grid item xs={7} >
-                <Box pt={2}
+            <Grid item xs={7}>
+              <Box
+                pt={2}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',                    
+                    display: "inline",
+                    margin: "0px",
+                    fontSize: "16px",
                   }}
                 >
-                  
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      fontSize: "16px"
-                    }}
-                  >
-                   no hay nada
-                  </Typography>
-                </Box>               
+                  no hay nada
+                </Typography>
+              </Box>
             </Grid>
-              
+
             {/* FILA 8 DIAGNOSTICO */}
             <Grid item xs={7}>
-              <Box pt={2}
+              <Box
+                pt={2}
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                                          
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 <Iconodiagnostico
                   sx={{
-                    display: 'inline',
-                    margin:"0px"
+                    display: "inline",
+                    margin: "0px",
+                  }}
+                ></Iconodiagnostico>
+                <Typography
+                  sx={{
+                    fontWeight: "medium",
+                    fontSize: "15px",
+                    display: "inline",
+                    margin: "0px",
+                    marginLeft: "10px",
                   }}
                 >
-                </Iconodiagnostico>                                                                 
-                <Typography 
-                  sx={{
-                    fontWeight: 'medium',
-                    fontSize: "15px",
-                    display: 'inline',
-                    margin:"0px",
-                    marginLeft: "10px"
-                  }}
-                >Diagnosticos:
+                  Diagnosticos:
                 </Typography>
-
               </Box>
             </Grid>
-            <Grid item xs={5} >
-                <Box pt={2}
+            <Grid item xs={5}>
+              <Box
+                pt={2}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',                    
+                    display: "inline",
+                    margin: "0px",
+                    fontSize: "17px",
                   }}
                 >
-                  
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      fontSize: "17px"
-                    }}
-                  >
-                   no hay 
-                  </Typography>
-                </Box>               
+                  no hay
+                </Typography>
+              </Box>
             </Grid>
 
             <Grid item xs={12}>
-              <Box pt={2}
+              <Box
+                pt={2}
                 sx={{
-                  display: 'flex',
+                  display: "flex",
                   // alignItems: 'center',
-                  justifyContent: 'center',                       
+                  justifyContent: "center",
                 }}
               >
                 <Button
-                variant="contained"
-                color="primary"
-                onClick={(e) => manejoDiagnostico(tik)}
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => manejoDiagnostico(tik)}
                 >
-                Diagnosticar
+                  Diagnosticar
                 </Button>
               </Box>
             </Grid>
-
           </Grid>
         </Box>
       </div>
     );
   };
 
-
-
   useEffect(() => {
     fire
       .firestore()
       .collection("tikets")
-      .where("asignado", "==", "Luis Ro")
+      //.where("asignado", "==", "Luis Ro")
       .onSnapshot((snap) => {
         var array = [];
         setTikets(array);
-        snap.forEach((tik) => {
-          var tikete = {
-            id: tik.data().id,
-            numero: tik.data().id,
-            nombre: tik.data().nombre,
-            tipo: tik.data().tipo,
-            fechaCreacion: getFecha(tik.data().fechaCreacion),
-            estado: tik.data().estado,
-            direccion: tik.data().direccion,
-            celular: tik.data().numero,
-            ciudad: tik.data().ciudad,
-            factura: tik.data().factura,
-            maquinas: tik.data().maquinas,
-            falla: tik.data().falla,
-            asignado: tik.data().asignado,
-            email: tik.data().email,
-            anexos: tik.data().anexos,
-            idCliente: tik.data().idCliente,
-            legalizacion: tik.data().legalizacion,
-            fecTimestamp: tik.data().fechaCreacion,
-          };
+        snap.forEach((doc) => {
+          var tike = new tiket(doc);
 
-          setTikets((array) => array.concat(tikete));
-          array.push(tikete);
+          setTikets((array) => array.concat(tike));
+          array.push(tike);
         });
         setNum(array.length);
         console.log("numero=>" + num);
@@ -526,198 +474,178 @@ const TikestPropios = () => {
 
   return (
     <div>
-      <Grid
-        container
-        direction="column"
-        justifyContent="flex-start"
-        pt={3}        
-      >
-          <Grid container > 
-            {/* FILA ROJA TAMAÑO 9 */}
-            <Grid item xs={9}>
-              <Grid container  
-                sx={{ 
-                  bgcolor: "rgb(236,27,59)", 
-                  borderRadius: '25px', 
-                  p:"2px",                
-                }}
-              > 
-                {/* COLUMNAS DENTRO DE LA FILA PARA POSICIONAR LOS ICONOS Y TEXTOS */}
-                <Grid item xs={1}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    paddingLeft: "15px"
-                  }}
-                >
-                    <Iconotecnico></Iconotecnico>
-                </Grid>
-                <Grid item xs={3} 
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',                                    
-                  }}                
-                > 
-                  <Box>
-                    <Typography 
-                      sx={{
-                        color:"white",
-                      }}
-                    >
-                      Juan Con Miedo Pitacuar</Typography>
-                    <Typography>Tecnico</Typography> 
-                  </Box> 
-                </Grid>
-                <Grid item xs={4}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end', 
-                    alignItems: 'center',
-                  }} 
-                >
-                  <Iconoinformacion></Iconoinformacion>
-                  <Typography 
-                    sx={{
-                        display: 'inline',
-                        margin:"0px",
-                        fontSize: "16px",
-                        color:"white",
-                        marginLeft: "15px"
-                    }}
-                  >
-                    7 Tickets por terminar
-                  </Typography>
-                </Grid>
-                <Grid item xs={3}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',   
-                    alignItems: 'center'                             
-                  }}
-                >
-                  <Iconobodega></Iconobodega>
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      marginLeft: "15px",
-                      fontSize: "16px",
-                      color:"white",
-                    }}
-                  >
-                  Bodega #5 
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
-            
-            {/* FILA BLANCA PRIORIDADES */}
-            <Grid item xs={9} mt={4} >
-              <Grid container 
+      <Grid container direction="column" justifyContent="flex-start" pt={3}>
+        {/* FILA ROJA TAMAÑO 9 */}
+        <Grid item>
+          <Box
+            container
+            sx={{
+              bgcolor: "#EC1B3B",
+              borderRadius: 2,
+              padding: 1,
+              boxShadow: 5,
+            }}
+          >
+            {/* COLUMNAS DENTRO DE LA FILA PARA POSICIONAR LOS ICONOS Y TEXTOS */}
+            <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              alignItems="center"
+              sx={{ paddingLeft: 1 }}
+            >
+              <Iconotecnico />
+
+              <Typography
                 sx={{
-                  bgcolor: "rgb(255,255,255)",  
-                  p:"10px",
-                  borderRadius: '5px',
-                  boxShadow: 3,   
+                  color: "white",
+                  marginLeft: 1,
+                  fontSize: 14,
+                  marginRight: 3,
                 }}
               >
-                {/* COLUMNAS DENTRO DE LA FILA BLANCA PARA POSICIONAR LOS NIVELES */}
-                <Grid item xs={4}            
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',                               
-                  }}
-                >
-                  <Icononivel></Icononivel>
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      marginLeft: "15px",
-                      fontSize: "16px",
-                    }}
-                  >
-                  Nivel Prioridad 
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',                               
-                  }}
-                >
-                  <Iconorellamada></Iconorellamada>
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      marginLeft: "15px",
-                      fontSize: "16px",
-                    }}
-                  >
-                  Rellamada 
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',                               
-                  }}
-                >
-                  <Iconourgente></Iconourgente>
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      marginLeft: "15px",
-                      fontSize: "16px",
-                    }}
-                  >
-                  Alta 
-                  </Typography>
+                Juan Con Miedo Pitacuar
+              </Typography>
 
-                </Grid>
-                <Grid item xs={2}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',                               
-                  }}
-                >
-                  <Iconomedia></Iconomedia>
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      marginLeft: "15px",
-                      fontSize: "16px",
-                    }}
-                  >
-                  Media
-                  </Typography>
+              <Iconoinformacion />
+              <Typography
+                sx={{
+                  color: "white",
+                  marginLeft: 1,
+                  fontSize: 14,
+                  marginRight: 1,
+                }}
+              >
+                7 Tickets por terminar
+              </Typography>
 
-                </Grid>
-                <Grid item xs={2}
+              <Typography
+                sx={{
+                  marginLeft: 2,
+                  marginRight: 2,
+                  fontSize: 14,
+                  color: "white",
+                }}
+              >
+                Bodega #5
+              </Typography>
+            </Grid>
+          </Box>
+        </Grid>
+
+        {/* FILA BLANCA PRIORIDADES */}
+        <Grid item>
+          <Box
+            sx={{
+              bgcolor: "rgb(255,255,255)",
+              p: "10px",
+              borderRadius: "5px",
+              boxShadow: 3,
+            }}
+          >
+            <Grid item>
+              {/* COLUMNAS DENTRO DE LA FILA BLANCA PARA POSICIONAR LOS NIVELES */}
+              <Grid
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Typography
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',                               
+                    display: "inline",
+                    margin: "0px",
+                    marginLeft: "15px",
+                    fontSize: "16px",
                   }}
                 >
-                  <Iconobaja></Iconobaja>
-                  <Typography 
-                    sx={{
-                      display: 'inline',
-                      margin:"0px",
-                      marginLeft: "15px",
-                      fontSize: "16px",
-                    }}
-                  >
-                  Baja
-                  </Typography>
-                  
-                </Grid>
+                  Nivel Prioridad
+                </Typography>
               </Grid>
             </Grid>
-          </Grid>
+            <Grid
+              item
+              xs={2}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Iconorellamada></Iconorellamada>
+              <Typography
+                sx={{
+                  display: "inline",
+                  margin: "0px",
+                  marginLeft: "15px",
+                  fontSize: "16px",
+                }}
+              >
+                Rellamada
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={2}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Iconourgente></Iconourgente>
+              <Typography
+                sx={{
+                  display: "inline",
+                  margin: "0px",
+                  marginLeft: "15px",
+                  fontSize: "16px",
+                }}
+              >
+                Alta
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={2}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Iconomedia></Iconomedia>
+              <Typography
+                sx={{
+                  display: "inline",
+                  margin: "0px",
+                  marginLeft: "15px",
+                  fontSize: "16px",
+                }}
+              >
+                Media
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={2}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Iconobaja></Iconobaja>
+              <Typography
+                sx={{
+                  display: "inline",
+                  margin: "0px",
+                  marginLeft: "15px",
+                  fontSize: "16px",
+                }}
+              >
+                Baja
+              </Typography>
+            </Grid>
+          </Box>
+        </Grid>
+
         {/* GRID CONTENEDOR DE LAS CARDS GENERADAS POR LA FUNCION  const Tikets*/}
         <Grid
           container
@@ -735,7 +663,7 @@ const TikestPropios = () => {
       {/****Detalle Tikets****/}
       <ThemeProvider theme={TemaDialog}>
         <Dialog open={openDiagnostico}>
-          <PasosDiagnostico tiketDiag={tiketDiag}  />
+          <PasosDiagnostico tiketDiag={tiketDiag} />
         </Dialog>
       </ThemeProvider>
     </div>

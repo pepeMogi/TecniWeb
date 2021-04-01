@@ -163,6 +163,7 @@ const Main = (props) => {
   const [id, setId] = useState("");
   const [avatar, setAvatar] = useState("");
   const [numNuevos, setNumNuevos] = useState("");
+  const [titulo,setTitulo] = useState("Tecniprint");
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -213,6 +214,12 @@ const Main = (props) => {
   const cerrarChat = () => {
     setAbrirChat(false);
   };
+
+
+  const cambiarTitulo = (tit) =>{
+    console.log(tit);
+    setTitulo(tit)
+  }
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -287,8 +294,8 @@ const Main = (props) => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Tecniprin Soluciones de impresion
+            <Typography variant="h6" noWrap component="div" sx={{marginLeft: 1}}>
+              {titulo}
             </Typography>
 
             <div className={classes.grow} />
@@ -373,7 +380,7 @@ const Main = (props) => {
                 <Collapse in={openTikets} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
                     <Link to="/tiketsnuevos" className={classes.link}>
-                      <ListItem button>
+                      <ListItem button onClick={(e) => cambiarTitulo("Tikets Nuevos")}>
                         <Box sx={{ marginLeft: 7 }}>
                           <ListItemText sx={{ color: "#ffffff" }}>
                             Tickets Nuevos
@@ -383,7 +390,7 @@ const Main = (props) => {
                     </Link>
 
                     <Link to="/tiketstodos" className={classes.link}>
-                      <ListItem button>
+                      <ListItem button onClick={(e) => cambiarTitulo("Todos los Tikes")}>
                         <Box sx={{ marginLeft: 7 }}>
                           <ListItemText sx={{ color: "#ffffff" }}>
                             Todos los Tikes
@@ -393,7 +400,7 @@ const Main = (props) => {
                     </Link>
 
                     <Link to="/tiketspropios" className={classes.link}>
-                      <ListItem button>
+                      <ListItem button onClick={(e) => cambiarTitulo("Mis Tickets")}>
                         <Box sx={{ marginLeft: 7 }}>
                           <ListItemText sx={{ color: "#ffffff" }}>
                             Mis Tickets
@@ -428,7 +435,7 @@ const Main = (props) => {
                 <Collapse in={openLegalizar} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
                     <Link to="/legalizar" className={classes.link}>
-                      <ListItem button>
+                      <ListItem button onClick={(e) => cambiarTitulo("Tikets para legalizar")}>
                         <Box sx={{ marginLeft: 7 }}>
                           <ListItemText sx={{ color: "#ffffff" }}>
                             Tikets para legalizar
@@ -468,7 +475,7 @@ const Main = (props) => {
               >
                 <List component="div" disablePadding>
                   <Link to="/agenda" className={classes.link}>
-                    <ListItem button>
+                    <ListItem button onClick={(e) => cambiarTitulo("Agenda")}>
                       <Box sx={{ marginLeft: 7 }}>
                         <ListItemText sx={{ color: "#ffffff" }}>
                           Agenda
@@ -478,7 +485,7 @@ const Main = (props) => {
                   </Link>
 
                   <Link to="/historialtrabajo" className={classes.link}>
-                    <ListItem button>
+                    <ListItem button onClick={(e) => cambiarTitulo("Historial de Trabajo")}>
                       <Box sx={{ marginLeft: 7 }}>
                         <ListItemText sx={{ color: "#ffffff" }}>
                           Historial de Trabajo
@@ -487,7 +494,7 @@ const Main = (props) => {
                     </ListItem>
                   </Link>
                   <Link to="/tecnicos" className={classes.link}>
-                    <ListItem button>
+                    <ListItem button onClick={(e) => cambiarTitulo("Tecnicos Planta")}>
                       <Box sx={{ marginLeft: 7 }}>
                         <ListItemText sx={{ color: "#ffffff" }}>
                           Tecnicos Planta
@@ -498,7 +505,7 @@ const Main = (props) => {
                 </List>
               </Collapse>
 
-              <ListItem button>
+              <ListItem button onClick={(e) => cambiarTitulo("Repuestos")}>
                 <ListItemIcon>
                   <IcRepu />
                 </ListItemIcon>
@@ -517,7 +524,7 @@ const Main = (props) => {
                 }}
               />
 
-              <ListItem button>
+              <ListItem button onClick={(e) => cambiarTitulo("Maquinas")}>
                 <ListItemIcon>
                   <IcMaqui />
                 </ListItemIcon>
@@ -542,7 +549,7 @@ const Main = (props) => {
                 }}
               />
 
-              <ListItem button>
+              <ListItem button onClick={(e) => cambiarTitulo("Clientes")}>
                 <ListItemIcon>
                   <IcCliente />
                 </ListItemIcon>
@@ -595,7 +602,7 @@ const Main = (props) => {
               <Collapse in={openComer} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   <Link to="/" className={classes.link}>
-                    <ListItem button>
+                    <ListItem button onClick={(e) => cambiarTitulo("Productos")}>
                       <Box sx={{ marginLeft: 7 }}>
                         <ListItemText sx={{ color: "#ffffff" }}>
                           Productos
@@ -606,7 +613,7 @@ const Main = (props) => {
 
                   {/* LINK DE REFERENCIA A  MAQUINAS  */}
                   <Link to="/maquinas" className={classes.link}>
-                    <ListItem button>
+                    <ListItem button onClick={(e) => cambiarTitulo("Maquinas")}>
                       <Box sx={{ marginLeft: 7 }}>
                         <ListItemText sx={{ color: "#ffffff" }}>
                           Maquinas
@@ -616,10 +623,10 @@ const Main = (props) => {
                   </Link>
                   {/* LINK DE REFERENCIA A BANNER */}
                   <Link to="/banners" className={classes.link}>
-                    <ListItem button>
+                    <ListItem button onClick={(e) => cambiarTitulo("Banners")}>
                       <Box sx={{ marginLeft: 7 }}>
                         <ListItemText sx={{ color: "#ffffff" }}>
-                          Banner
+                          Banners
                         </ListItemText>
                       </Box>
                     </ListItem>
@@ -670,7 +677,7 @@ const Main = (props) => {
                 </Route>
                 <Route exact path="/tiketspropios">
                   <Container maxWidth={false} padding={0}>
-                    <TiketPropios />
+                    <TiketPropios admin={admin} />
                   </Container>
                 </Route>
 
