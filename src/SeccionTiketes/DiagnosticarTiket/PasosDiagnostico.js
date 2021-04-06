@@ -2,7 +2,7 @@ import { React, useState, useEffect } from "react";
 import {
   Stepper,
   Step,
-  StepLabel, 
+  StepLabel,
   Grid,
   StepConnector,
 } from "@material-ui/core";
@@ -18,9 +18,14 @@ import TemaFormu from "./../../Temas/TemaFormu";
 import IcUno from "./../../Iconos/icuno";
 import IcDos from "./../../Iconos/icdos";
 import IcTres from "./../../Iconos/ictres";
-import PasoUnoMetodo from './PasoUnoMetodo';
-import PasoDosMaquinas from "./PasoDosMaquinas";
-import PasoTresDiagnostico from './PasoTresDiagnostico';
+import PasoUnoDiagnostico from "./PasoUnoDiagnostico";
+import PasoDosSolucion from "./PasoDosSolucion";
+import PasoTresRepuestos from "./PasoTresRepuestos";
+import PasoCuatroMaquina from "./PasoCuatroMaquina";
+import { maquina } from "./../../Entidades/maquina";
+import PasoCincoAnexos from "./PasoCincoAnexos";
+import PasoSeisEstado from "./PasoSeisEstado";
+import PasoSieteFinalizar from "./PasoSieteFinalizar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,17 +40,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PasosDiagnostico = (props) => { 
-  const {tiketDiag} = props;
+const PasosDiagnostico = (props) => {
+  const { tiketDiag, cerrarDiagnostico } = props;
   const [paso, setPaso] = useState(0);
   const [titulo, setTitulo] = useState("");
-  const [diagExport,setDiagExport] = useState("");
-
+  const [diagnostico, setDiagnostico] = useState("");
+  const [solucion, setSolucion] = useState("");
+  const [repuestos, setRepuestos] = useState([]);
+  const [maquina, setMaquina] = useState("");
+  const [anexos, setAnexos] = useState([]);
+  const [comentario, setComentario] = useState("");
+  const [estado, setEstado] = useState("");
+  const [actMaquina, setActMaquina] = useState(false);
 
   const classes = useStyles();
 
   const avanzar = () => {
-    if (paso < 4) {
+    if (paso < 6) {
       setPaso(paso + 1);
     }
   };
@@ -59,11 +70,91 @@ const PasosDiagnostico = (props) => {
   const mostrarPasos = (paso) => {
     switch (paso) {
       case 0:
-        return <PasoUnoMetodo avanzar={avanzar} tiketId={tiketDiag.id} setDiagExport={setDiagExport}  />;
+        return (
+          <PasoUnoDiagnostico
+            avanzar={avanzar}
+            cerrarDiagnostico={cerrarDiagnostico}
+            diagnostico={diagnostico}
+            setDiagnostico={setDiagnostico}
+            diag={tiketDiag}
+          />
+        );
       case 1:
-        return <PasoDosMaquinas avanzar={avanzar} tiketDiag={tiketDiag} retroceder={retroceder} idCliente={tiketDiag.idCliente} /> ;
+        return (
+          <PasoDosSolucion
+            avanzar={avanzar}
+            retroceder={retroceder}
+            solucion={solucion}
+            setSolucion={setSolucion}
+          />
+        );
       case 2:
-        return <PasoTresDiagnostico avanzar={avanzar} tiketDiag={tiketDiag} retroceder={retroceder} />;
+        return (
+          <PasoTresRepuestos
+            avanzar={avanzar}
+            retroceder={retroceder}
+            solucion={solucion}
+            setSolucion={setSolucion}
+            repuestos={repuestos}
+            setRepuestos={setRepuestos}
+          />
+        );
+      case 3:
+        return (
+          <PasoCuatroMaquina
+            avanzar={avanzar}
+            retroceder={retroceder}
+            idMaquina={tiketDiag.idMaquina}
+            maquina={maquina}
+            setMaquina={setMaquina}
+            setActMaquina={setActMaquina}
+          />
+        );
+      case 4:
+        return (
+          <PasoCincoAnexos
+            avanzar={avanzar}
+            retroceder={retroceder}
+            solucion={solucion}
+            setSolucion={setSolucion}
+            anexos={anexos}
+            setAnexos={setAnexos}
+            comentario={comentario}
+            setComentario={setComentario}
+            repuestos={repuestos}
+            tiketDiag={tiketDiag}
+          />
+        );
+
+      case 5:
+        return (
+          <PasoSeisEstado
+            avanzar={avanzar}
+            retroceder={retroceder}
+            solucion={solucion}
+            setSolucion={setSolucion}
+            anexos={anexos}
+            comentario={comentario}
+            repuestos={repuestos}
+            tiketDiag={tiketDiag}
+            setEstado={setEstado}
+          />
+        );
+      case 6:
+        return (
+          <PasoSieteFinalizar
+            avanzar={avanzar}
+            retroceder={retroceder}
+            solucion={solucion}
+            setSolucion={setSolucion}
+            anexos={anexos}
+            comentario={comentario}
+            repuestos={repuestos}
+            tiketDiag={tiketDiag}
+            setEstado={setEstado}
+            diagnostico={diagnostico}
+          />
+        );
     }
   };
 
@@ -90,32 +181,30 @@ const PasosDiagnostico = (props) => {
     },
   })(StepConnector);
 
-  const IconoTitulo = (paso) => {
-    switch (paso) {
-      case 0:
-        return <IcUno />;
-        break;
-      case 1:
-        return <IcDos />;
-        break;
-      case 2:
-        return <IcTres />;
-        break;
-      case 3:
-        break;
-      case 4:
-        break;
-    }
-  };
-
   useEffect(() => {
     switch (paso) {
       case 0:
-        setTitulo("Escoger Tecnico");
+        setTitulo("Diagnostico");
         break;
       case 1:
-        setTitulo("Agregar Comentario");
+        setTitulo("Solucion");
         break;
+      case 2:
+        setTitulo("Repuestos");
+        break;
+      case 3:
+        setTitulo("Actualizar Contadores");
+        break;
+      case 4:
+        setTitulo("Anexos y Comentario");
+        break;
+      case 5:
+        setTitulo("Estado");
+        break;
+      case 6:
+        setTitulo("Subir Reporte");
+        break;
+    
     }
   }, [paso]);
 
@@ -129,7 +218,6 @@ const PasosDiagnostico = (props) => {
           alignItems="center"
           sx={{ marginTop: 4 }}
         >
-          {IconoTitulo(paso)}
           <Typography
             variant="h6"
             align="center"
@@ -148,7 +236,44 @@ const PasosDiagnostico = (props) => {
             connector={<QontoConnector />}
           >
             <Step>
-              <StepLabel icon={" "}></StepLabel>
+              <StepLabel
+                icon={" "}
+                StepIconProps={{
+                  classes: { root: classes.stepIcon },
+                }}
+              ></StepLabel>
+            </Step>
+            <Step>
+              <StepLabel
+                icon={" "}
+                StepIconProps={{
+                  classes: { root: classes.stepIcon },
+                }}
+              ></StepLabel>
+            </Step>
+            <Step>
+              <StepLabel
+                icon={" "}
+                StepIconProps={{
+                  classes: { root: classes.stepIcon },
+                }}
+              ></StepLabel>
+            </Step>
+            <Step>
+              <StepLabel
+                icon={" "}
+                StepIconProps={{
+                  classes: { root: classes.stepIcon },
+                }}
+              ></StepLabel>
+            </Step>
+            <Step>
+              <StepLabel
+                icon={" "}
+                StepIconProps={{
+                  classes: { root: classes.stepIcon },
+                }}
+              ></StepLabel>
             </Step>
             <Step>
               <StepLabel
@@ -162,8 +287,6 @@ const PasosDiagnostico = (props) => {
           {mostrarPasos(paso)}
         </Paper>
       </ThemeProvider>
-
-     
     </div>
   );
 };

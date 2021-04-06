@@ -22,6 +22,7 @@ import Iconourgente from "../Iconos/iconourgente";
 import Iconomedia from "../Iconos/iconomedia";
 import Iconobaja from "../Iconos/iconobaja";
 import { tiket } from "./../Entidades/tikets";
+import TiketCardGrande from "../Componentes/TiketCardGrande";
 
 const TikestPropios = (props) => {
   const { admin } = props;
@@ -454,10 +455,12 @@ const TikestPropios = (props) => {
   };
 
   useEffect(() => {
+    
     fire
       .firestore()
       .collection("tikets")
-      //.where("asignado", "==", "Luis Ro")
+      .where("asignado", "==", admin.alias ? admin.alias : "")
+      .where("estado", "==","asignado")
       .onSnapshot((snap) => {
         var array = [];
         setTikets(array);
@@ -470,12 +473,16 @@ const TikestPropios = (props) => {
         setNum(array.length);
         console.log("numero=>" + num);
       });
-  }, []);
+  }, [admin]);
 
   return (
     <div>
-      <Grid container 
-      direction="column" justifyContent="flex-start">
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        alignItems="flex-start"
+      >
         {/* FILA ROJA TAMAÑO 9 */}
 
         <Box
@@ -504,7 +511,7 @@ const TikestPropios = (props) => {
                 marginRight: 3,
               }}
             >
-              Juan Con Miedo Pitacuar
+              {admin.nombre}
             </Typography>
 
             <Iconoinformacion />
@@ -516,7 +523,7 @@ const TikestPropios = (props) => {
                 marginRight: 1,
               }}
             >
-              7 Tickets por terminar
+              {"(" + num + ") " + "por diligenciar"}
             </Typography>
 
             <Typography
@@ -527,7 +534,7 @@ const TikestPropios = (props) => {
                 color: "white",
               }}
             >
-              Bodega #5
+              {"Bodega # " + admin.bodega}
             </Typography>
           </Grid>
         </Box>
@@ -554,42 +561,84 @@ const TikestPropios = (props) => {
             <Typography
               sx={{
                 marginLeft: 1,
-                fontSize: 14,
+                fontSize: 13,
+                fontStyle: "italic",
+                fontWeight: 600,
+                color: "#989696"
               }}
             >
               Nivel Prioridad
             </Typography>
 
+            <Box
+              sx={{
+                width: 14,
+                height: 14,
+                borderRadius: 2,
+                marginLeft: 3,
+                marginRight: 1,
+              }}
+              backgroundColor="#FF0034"
+            />
             <Typography
               sx={{
-                marginLeft: 1,
                 fontSize: 14,
               }}
             >
               Rellamada
             </Typography>
 
+            <Box
+              sx={{
+                width: 14,
+                height: 14,
+                borderRadius: 2,
+                marginLeft: 1,
+                marginRight: 1,
+              }}
+              backgroundColor="#FE9916"
+            />
+
             <Typography
               sx={{
-                marginLeft: 1,
                 fontSize: 14,
               }}
             >
               Alta
             </Typography>
 
+            <Box
+              sx={{
+                width: 14,
+                height: 14,
+                borderRadius: 2,
+                marginLeft: 1,
+                marginRight: 1,
+              }}
+              backgroundColor="#F6D119"
+            />
+
             <Typography
               sx={{
-                marginLeft: 1,
                 fontSize: 14,
               }}
             >
               Media
             </Typography>
 
+            <Box
+              sx={{
+                width: 14,
+                height: 14,
+                borderRadius: 2,
+                marginLeft: 1,
+                marginRight: 1,
+              }}
+              backgroundColor="#0F996D"
+            />
+
             <Typography
               sx={{
-                marginLeft: 1,
                 fontSize: 14,
               }}
             >
@@ -604,10 +653,10 @@ const TikestPropios = (props) => {
           direction="row"
           justifyContent="flex-start"
           alignItems="flex-start"
-          pt={5}
+          pt={4}
         >
           {tikets.map((tik) => {
-            return <Tikets tik={tik} />;
+            return <TiketCardGrande tiket={tik} />;
           })}
         </Grid>
       </Grid>

@@ -1,29 +1,49 @@
 import { React, useState } from "react";
-import { Box, Grid, Typography, Dialog, Grow } from "@material-ui/core";
+import {
+  Box,
+  Grid,
+  Typography,
+  Dialog,
+  Grow,
+  Button,
+  IconButton,
+} from "@material-ui/core";
 import IconTipo from "./IconosTiketCard/iconTipo";
 import IconMaquina from "./IconosTiketCard/IcMaquina";
 import Iconofalla from "./IconosTiketCard/IcFalla";
 import TemaDialog from "../Temas/TemaDialog";
 import { ThemeProvider } from "@material-ui/core/styles";
 import TiketDetalle from "../Tiket/TiketDetalle";
+import IconoAlerta from "./IconosTiketCard/IcAlerta";
+import PasosDiagnostico from "./../SeccionTiketes/DiagnosticarTiket/PasosDiagnostico";
+import IconoDiligenciar from "./../SeccionTiketes/IconosDiagnosticar/IconoDiligenciar";
+import IconoDetalle from "./../SeccionTiketes/IconosDiagnosticar/IconoDetalle";
 
-
-const TiketCard = (props) => {
+const TiketCardGrande = (props) => {
   const { tiket } = props;
-  const [abrirDeta,setAbrirDeta] = useState(false);
+  const [abrirDeta, setAbrirDeta] = useState(false);
+  const [abrirDiag, setAbrirDiag] = useState(false);
 
   var nom = tiket.nombre;
   if (tiket.solicitante != null && tiket.solicitante != "") {
     nom += " /" + tiket.solicitante;
   }
 
-  const abrirDetalle = () =>{
+  const abrirDetalle = () => {
     setAbrirDeta(true);
-  }
+  };
 
-  const cerrarDetalle = () =>{
+  const cerrarDetalle = () => {
     setAbrirDeta(false);
-  }
+  };
+
+  const abrirDiagnostico = () => {
+    setAbrirDiag(true);
+  };
+
+  const cerrarDiagnostico = () => {
+    setAbrirDiag(false);
+  };
 
   const getPrioridad = (prioridad) => {
     switch (prioridad) {
@@ -62,13 +82,11 @@ const TiketCard = (props) => {
         sx={{
           borderRadius: 2,
           boxShadow: 5,
-          marginLeft: 1,
-          marginRight: 1,
-          marginTop: 2,
+          marginRight: 3,
+          marginBottom: 3,
           backgroundColor: "#ffffff",
           padding: 1,
         }}
-        onClick={(e) => abrirDetalle()}
       >
         <Grid
           container
@@ -115,7 +133,7 @@ const TiketCard = (props) => {
                   fontWeight: 600,
                   color: "#3D3D3D",
                   marginLeft: 1,
-                  width: 85,
+                  width: 120,
                   textOverflow: "ellipsis",
                   overflow: "hidden",
                   whiteSpace: "nowrap",
@@ -126,7 +144,12 @@ const TiketCard = (props) => {
               </Typography>
 
               <Typography
-                sx={{ fontSize: 14, fontWeight: 600, color: "#EC1B3B" }}
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: "#EC1B3B",
+                  marginRight: 0.5,
+                }}
               >
                 {tiket.id.toUpperCase()}
               </Typography>
@@ -141,7 +164,14 @@ const TiketCard = (props) => {
               justify="space-between"
               alignItems="center"
             >
-              <Typography sx={{ fontSize: 14, fontWeight: 500, marginLeft: 1 }}>
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  marginLeft: 1,
+                  marginTop: 1,
+                }}
+              >
                 Nombre:
               </Typography>
               <Typography
@@ -150,6 +180,7 @@ const TiketCard = (props) => {
                   fontWeight: 400,
                   marginLeft: 1,
                   color: "#727070",
+                  marginTop: 1,
                 }}
               >
                 {nom}
@@ -205,35 +236,112 @@ const TiketCard = (props) => {
             </Grid>
           </Grid>
 
-          <Typography
-            sx={{
-              textAlign: "end",
-              fontSize: 11,
-              color: "#EC1B3B",
-              width: 270,
-              fontWeight: 500,
-            }}
-          >
-            {tiket.estado}
-          </Typography>
+          {/****Anexos****/}
+          <Grid item>
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+              sx={{ marginTop: 1 }}
+            >
+              <IconoAlerta />
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 400,
+                  marginLeft: 2,
+                  color: "#727070",
+                  marginTop: -0.6,
+                }}
+              >
+                {"("}
+                {tiket.anexos ? tiket.anexos.length : "0"}
+                {") Imagenes adjuntas"}
+              </Typography>
+            </Grid>
+          </Grid>
+
+          {/****Diagnosticar****/}
+          <Grid item>
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+              sx={{ marginTop: 1, paddingLeft: 1, paddingRight: 1 }}
+            >
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  color: "#EC1B3B",
+                  fontWeight: 500,
+                  width: 210,
+                }}
+              >
+                {tiket.estado}
+              </Typography>
+
+              <Box
+                sx={{
+                  marginBottom: 1,
+                  marginRight: 1,
+                  backgroundColor: "#3d3d3d",
+                  borderRadius: 1,
+                  boxShadow: 5,
+                }}
+                onClick={(e) => abrirDetalle()}
+              >
+                <IconoDetalle />
+              </Box>
+
+              <Box
+                sx={{
+                  marginBottom: 1,
+                  
+                  backgroundColor: "#3d3d3d",
+                  borderRadius: 1,
+                  boxShadow: 5,
+                }}
+                onClick={(e) => abrirDiagnostico()}
+              >
+                <IconoDiligenciar />
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
       </Box>
 
-        {/****Dialog Detalle Tiket****/}
-        <ThemeProvider theme={TemaDialog}>
-          <Dialog
-            fullWidth={true}
-            sx={{ justifyContent: "center" }}
-            TransitionComponent={Grow}
-            open={abrirDeta}
-            onClose={cerrarDetalle}
-          >
-            <TiketDetalle tiketDetalle={tiket} />
-          </Dialog>
-        </ThemeProvider>
+      {/****Dialog Detalle Tiket****/}
+      <ThemeProvider theme={TemaDialog}>
+        <Dialog
+          fullWidth={true}
+          sx={{ justifyContent: "center" }}
+          TransitionComponent={Grow}
+          open={abrirDeta}
+          onClose={cerrarDetalle}
+        >
+          <TiketDetalle tiketDetalle={tiket} />
+        </Dialog>
+      </ThemeProvider>
+
+      {/****Dialog Gestionar****/}
+      <ThemeProvider theme={TemaDialog}>
+        <Dialog
+          fullWidth={true}
+          sx={{ justifyContent: "center" }}
+          TransitionComponent={Grow}
+          open={abrirDiag}
+          onClose={cerrarDiagnostico}
+        >
+          <PasosDiagnostico
+            tiketDiag={tiket}
+            cerrarDiagnostico={cerrarDiagnostico}
+          />
+        </Dialog>
+      </ThemeProvider>
     </div>
   );
 };
 
-export default TiketCard;
-
+export default TiketCardGrande;
