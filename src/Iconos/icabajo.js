@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
   root: {},
 }));
 
-const IconDireccionAbajo = () => {
+const IconoCirculo = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -25,4 +25,4 @@ const IconDireccionAbajo = () => {
     </div>
   );
 };
-export default IconDireccionAbajo;
+export default IconoCirculo;

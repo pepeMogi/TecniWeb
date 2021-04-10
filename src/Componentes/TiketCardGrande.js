@@ -18,6 +18,7 @@ import IconoAlerta from "./IconosTiketCard/IcAlerta";
 import PasosDiagnostico from "./../SeccionTiketes/DiagnosticarTiket/PasosDiagnostico";
 import IconoDiligenciar from "./../SeccionTiketes/IconosDiagnosticar/IconoDiligenciar";
 import IconoDetalle from "./../SeccionTiketes/IconosDiagnosticar/IconoDetalle";
+import TiketDetalleCompleto from './TiketsDetalle/TiketDetalleCompleto';
 
 const TiketCardGrande = (props) => {
   const { tiket } = props;
@@ -321,7 +322,7 @@ const TiketCardGrande = (props) => {
           open={abrirDeta}
           onClose={cerrarDetalle}
         >
-          <TiketDetalle tiketDetalle={tiket} />
+          <TiketDetalleCompleto tiket={tiket} />
         </Dialog>
       </ThemeProvider>
 

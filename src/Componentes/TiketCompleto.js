@@ -11,23 +11,66 @@ import TiketDetalle from "../Tiket/TiketDetalle";
 import IconTipo from './IconosTiket/iconTipo';
 import IconTecnico from "./IconosTiket/iconTecnico";
 import IconoEstado from "./IconosTiket/IconoEstado";
+import IconoDetalle from './../SeccionTiketes/IconosDiagnosticar/IconoDetalle';
+import fire from "../fire";
+import { tiket } from './../Entidades/tikets';
+import TiketDetalleCompleto from "./TiketsDetalle/TiketDetalleCompleto";
 
 const TiketCompleto = (props) => {
-  const { tiket } = props;
+  const { tike } = props;
   const [openDetalle, setOpenDetalle] = useState(false);
+  const [tiketDetalle,setTiketDetalle] = useState("");
+  const [color,setColor] = useState("");
 
-  var nom = tiket.nombre;
-  if (tiket.solicitante != "" && tiket.solicitante != null) {
-    nom += "/" + tiket.solicitante;
+  
+
+  var nom = tike.nombre;
+  if (tike.solicitante != "" && tike.solicitante != null) {
+    nom += "/" + tike.solicitante;
+  }
+
+  const getColor = (num) =>{
+    switch (num) {
+   
+        
+      case 0:
+        return "#0F996D";
+        
+      case 1:
+        return "#F6D119";
+        
+      case 2:
+        return "#FE9916";
+        
+      case 3:
+        return "#FF0034";
+    }
+
   }
 
   const abrirDetalle = () => {
-    setOpenDetalle(true);
+
+    if(tike.ultimaVisita == ""){
+      console.log("es nullo");
+      fire.firestore().collection("tikets").doc(tike.id).get().then((doc) =>{
+        var tik = new tiket(doc);
+        setTiketDetalle(tik);
+        setOpenDetalle(true);
+      })
+    }else{
+      console.log("tiene");
+      setTiketDetalle(tike)
+      setOpenDetalle(true);
+    }
+
+    
   };
 
   const cerrarDetalle = () => {
     setOpenDetalle(false);
   };
+
+ 
 
   return (
     <div>
@@ -35,7 +78,7 @@ const TiketCompleto = (props) => {
         maxWidth
         sx={{
           backgroundColor: "#ffffff",
-          padding: 2,
+          padding: 1,
           boxShadow: 4,
           borderRadius: 2,
           marginTop: 2,
@@ -49,11 +92,11 @@ const TiketCompleto = (props) => {
           spacing={1}
         >
           <Box
+          backgroundColor={getColor(tike.prioridad)}
             sx={{
               width: 16,
               height: 16,
-              borderRadius: 2,
-              backgroundColor: "red",
+              borderRadius: 2,              
               marginTop: 1,
               marginLeft: 1.5,
             }}
@@ -67,7 +110,7 @@ const TiketCompleto = (props) => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <Typography sx={{fontWeight: 600}}>{tiket.id.toUpperCase()}</Typography>
+              <Typography sx={{fontWeight: 600}}>{tike.id.toUpperCase()}</Typography>
             </Grid>
           </Grid>
 
@@ -91,7 +134,7 @@ const TiketCompleto = (props) => {
                   fontSize: 14
                 }}
               >
-                {tiket.fechaCreacion}
+                {tike.fechaCreacion}
               </Typography>
             </Grid>
           </Grid>
@@ -141,7 +184,7 @@ const TiketCompleto = (props) => {
                   fontSize: 14
                 }}
               >
-                {tiket.tipo}
+                {tike.tipo}
               </Typography>
             </Grid>
           </Grid>
@@ -166,7 +209,7 @@ const TiketCompleto = (props) => {
                   fontSize: 14
                 }}
               >
-                {tiket.asignado}
+                {tike.asignado}
               </Typography>
             </Grid>
           </Grid>
@@ -192,20 +235,29 @@ const TiketCompleto = (props) => {
                   fontSize: 14
                 }}
               >
-                {tiket.estado}
+                {tike.estado}
               </Typography>
             </Grid>
           </Grid>
 
           {/***site item****/}
           <Grid item>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => abrirDetalle()}
-            >
-              Detalle
-            </Button>
+          <Box
+                sx={{
+                  marginBottom: 1,
+                  marginRight: 1,
+                  marginTop: 1,
+                  paddingTop: 0.1,
+                  backgroundColor: "#3d3d3d",
+                  borderRadius: 1,
+                  boxShadow: 5,
+                }}
+                onClick={(e) => abrirDetalle()}
+              >
+                <IconoDetalle />
+              </Box>
+         
+           
           </Grid>
         </Grid>
       </Box>
@@ -219,7 +271,7 @@ const TiketCompleto = (props) => {
           open={openDetalle}
           onClose={cerrarDetalle}
         >
-          <TiketDetalle tiketDetalle={tiket} />
+          <TiketDetalleCompleto tiket={tiketDetalle} />
         </Dialog>
       </ThemeProvider>
     </div>

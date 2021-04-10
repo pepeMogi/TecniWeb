@@ -6,6 +6,7 @@ import Iconofalla from "./IconosTiketCard/IcFalla";
 import TemaDialog from "../Temas/TemaDialog";
 import { ThemeProvider } from "@material-ui/core/styles";
 import TiketDetalle from "../Tiket/TiketDetalle";
+import TiketDetalleCompleto from './TiketsDetalle/TiketDetalleCompleto';
 
 
 const TiketCard = (props) => {
@@ -228,7 +229,7 @@ const TiketCard = (props) => {
             open={abrirDeta}
             onClose={cerrarDetalle}
           >
-            <TiketDetalle tiketDetalle={tiket} />
+            <TiketDetalleCompleto tiket={tiket} />
           </Dialog>
         </ThemeProvider>
     </div>

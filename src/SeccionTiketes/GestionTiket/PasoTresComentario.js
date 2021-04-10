@@ -117,7 +117,7 @@ const PasoTresComentario = (props) => {
         tipo: tipo,
         estado: "asignado",
         objectID: tiketId,
-        prioridad: prioridad
+        prioridad: prioridad - 1
       },
     ];
 
@@ -134,7 +134,7 @@ const PasoTresComentario = (props) => {
       .update({
         asignado: asignado,
         estado: "asignado",
-        prioridad: prioridad,
+        prioridad: prioridad - 1 ,
         tipo: tipo,
       })
       .then(() => {

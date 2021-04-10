@@ -13,7 +13,7 @@ var array = []
    
 
 
-  this.id = tecnico.replaceAll(" ","").concat((Math.random().toString().substring(0,4)).replaceAll(".",""));
+  this.id = tecnico.replaceAll(" ","").concat((Math.random().toString().substring(0,6)).replaceAll(".",""));
   this.tecnico = tecnico;
   this.diagnostico = diagnostico;
   this.solucion = solucion;

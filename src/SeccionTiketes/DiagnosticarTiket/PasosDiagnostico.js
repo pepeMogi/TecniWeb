@@ -50,8 +50,11 @@ const PasosDiagnostico = (props) => {
   const [maquina, setMaquina] = useState("");
   const [anexos, setAnexos] = useState([]);
   const [comentario, setComentario] = useState("");
+  const [nitTiket,setNitTiket] = useState("")
   const [estado, setEstado] = useState("");
   const [actMaquina, setActMaquina] = useState(false);
+  const [contaBN,setContaBn] = useState("");
+  const [contaColor,setContaColor] = useState("");
 
   const classes = useStyles();
 
@@ -108,6 +111,8 @@ const PasosDiagnostico = (props) => {
             maquina={maquina}
             setMaquina={setMaquina}
             setActMaquina={setActMaquina}
+            setContaBn={setContaBn}
+            setContaColor={setContaColor}
           />
         );
       case 4:
@@ -138,6 +143,7 @@ const PasosDiagnostico = (props) => {
             repuestos={repuestos}
             tiketDiag={tiketDiag}
             setEstado={setEstado}
+            setNitTiket={setNitTiket}
           />
         );
       case 6:
@@ -153,6 +159,10 @@ const PasosDiagnostico = (props) => {
             tiketDiag={tiketDiag}
             setEstado={setEstado}
             diagnostico={diagnostico}
+            estado={estado}
+            nitTiket={nitTiket}
+            contaBN={contaBN}
+            contaColor={contaColor}
           />
         );
     }

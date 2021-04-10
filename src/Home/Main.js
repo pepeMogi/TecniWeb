@@ -221,6 +221,8 @@ const Main = (props) => {
     setTitulo(tit)
   }
 
+
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -278,6 +280,7 @@ const Main = (props) => {
     <div className={classes.root}>
       <ThemeProvider theme={TemaFormu}>
         <CssBaseline />
+        <Router>
         <AppBar
           position="fixed"
           className={clsx(classes.appBar, {
@@ -300,6 +303,9 @@ const Main = (props) => {
 
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
+
+           
+
               <IconButton           
                 color="inherit"
               >
@@ -325,7 +331,7 @@ const Main = (props) => {
           </Toolbar>
         </AppBar>
         {renderMenu}
-        <Router>
+        
           <ThemeProvider theme={TemaDrawer}>
 
 

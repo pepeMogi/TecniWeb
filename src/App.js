@@ -6,6 +6,7 @@ import Loginf from "./Entrada/Loginf";
 import { ReactEasyNotify, notify } from "react-easy-notify";
 import "react-easy-notify/dist/index.css";
 import { tecnico } from "./Entidades/tecnico";
+import Imprimible from "./Componentes/Imprimible";
 
 /****Para Experiencia de usuario****/
 const options = {
@@ -197,10 +198,21 @@ const App = () => {
     escucharLogeo();
   }, []);
 
+  const tiket = {
+    tipo: "facturable",
+    nombre: "Juanito Perez Velasques Cuasques",
+    solicitante: "Benito Iglesias de la Olla",
+    nit: "275461265-8",
+    direccion: "calle 25 N 14-50",
+    celular: "3124567889",
+    email: "",
+    falla: "la impresora no imprime a color"
+  }
+
   return (
     <div>
       {user ? (
-        <Main salirLoging={salirLoging} user={user} />
+        <Main user={user} salirLoging={salirLoging} />
       ) : (
         <Loginf
           email={email}

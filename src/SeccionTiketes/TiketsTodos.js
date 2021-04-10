@@ -31,6 +31,7 @@ import { tiket } from "./../Entidades/tikets";
 import { tiketFromAlgolia } from "./../Entidades/tiketsFromAlgolia";
 
 const TiketTodos = () => {
+
   const [tikets, setTikets] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [orden, setOrden] = useState("");
@@ -39,6 +40,7 @@ const TiketTodos = () => {
   const [endDate, setEndDate] = useState(new Date());
   const [openDetalle, setOpenDetalle] = useState(false);
   const [detalleTiket, setDetalleTiket] = useState("");
+
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -151,9 +153,9 @@ const TiketTodos = () => {
         variant="contained"
         color="primary"
         onClick={onClick}
-        sx={{ width: 160, fontSize: 10, marginLeft: 1 }}
+        sx={{ width: 140, fontSize: 10, marginLeft: 1 }}
       >
-        Fecha Inicio {value}
+        Inicio {value}
       </Button>
     );
   };
@@ -164,9 +166,9 @@ const TiketTodos = () => {
         variant="contained"
         color="primary"
         onClick={onClick}
-        sx={{ width: 160, fontSize: 10, marginLeft: 2 }}
+        sx={{ width: 140, fontSize: 10, marginLeft: 2 }}
       >
-        Fecha Final {value}
+        Final {value}
       </Button>
     );
   };
@@ -174,6 +176,7 @@ const TiketTodos = () => {
   const buscarPorPalabra = () => {
     var mas = [];
     setTikets(mas);
+   
     console.log("buscando por palabra...");
 
     index.search(palabra).then(({ hits }) => {
@@ -260,6 +263,8 @@ const TiketTodos = () => {
       orientacion = "desc";
     }
 
+ 
+
     console.log("ordenar por: " + orden);
     fire
       .firestore()
@@ -275,6 +280,9 @@ const TiketTodos = () => {
         });
       });
   }, [orden]);
+
+
+ 
 
   return (
     <div>
@@ -330,9 +338,9 @@ const TiketTodos = () => {
                 variant="contained"
                 color="secondary"
                 onClick={(e) => buscarPorFecha(e)}
-                sx={{ marginLeft: 2 }}
+                sx={{ marginLeft: 2, height: 28 }}
               >
-                Buscar
+             <SearchIcon />
               </Button>
 
               {/****Barra Buscar****/}
@@ -377,12 +385,10 @@ const TiketTodos = () => {
 
           {/****Barra de Prioridad****/}
           <Box
-            sx={{
-              border: 1,
+            sx={{              
               borderColor: "#C2C1C1",
-              backgroundColor: "#ffffff",
-              borderRadius: 1,
-              boxShadow: 2,
+              backgroundColor: "#ffffff",         
+             
               padding: 1,
               marginTop: 4,
             }}
@@ -433,14 +439,18 @@ const TiketTodos = () => {
                   borderRadius: 2,
                 }}
               />
-              <Typography    sx={{
+              <Typography
+                sx={{
                   marginLeft: 1,
                   marginRight: 1,
                   fontSize: 12,
                   fontStyle: "italic",
                   color: "#3D3D3D",
                   fontWeight: 500,
-                }}>Alta</Typography>
+                }}
+              >
+                Alta
+              </Typography>
               <Box
                 sx={{
                   width: 14,
@@ -449,14 +459,18 @@ const TiketTodos = () => {
                   borderRadius: 2,
                 }}
               />
-              <Typography    sx={{
+              <Typography
+                sx={{
                   marginLeft: 1,
                   marginRight: 1,
                   fontSize: 12,
                   fontStyle: "italic",
                   color: "#3D3D3D",
                   fontWeight: 500,
-                }}>Media</Typography>
+                }}
+              >
+                Media
+              </Typography>
               <Box
                 sx={{
                   width: 14,
@@ -465,32 +479,27 @@ const TiketTodos = () => {
                   borderRadius: 2,
                 }}
               />
-              <Typography    sx={{
+              <Typography
+                sx={{
                   marginLeft: 1,
                   marginRight: 2,
                   fontSize: 12,
                   fontStyle: "italic",
                   color: "#3D3D3D",
                   fontWeight: 500,
-                
-                }}>Baja</Typography>
+                }}
+              >
+                Baja
+              </Typography>
             </Grid>
           </Box>
-          
         </Grid>
-        
       </Grid>
       <br></br>
-        {tikets.map((tiket) => {
-          return <TiketCompleto tiket={tiket} />;
-        })}
+      {tikets.map((tiket) => {
+        return <TiketCompleto tike={tiket} />;
+      })}
 
-      {/****Detalle Tikets****/}
-      <ThemeProvider theme={TemaDialog}>
-        <Dialog open={openDetalle} onClose={manejoCerrarDialog}>
-          <Tiket tiketDetalle={detalleTiket} />
-        </Dialog>
-      </ThemeProvider>
     </div>
   );
 };

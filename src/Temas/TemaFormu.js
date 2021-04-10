@@ -12,12 +12,18 @@ const TemaFormu = createMuiTheme({
   },
 
   shape: {
-    borderRadius: 6,
+    borderRadius: 0,
+    
+  },
+
+  shadows: {
+    0: ["none"]
   },
 
   typography: {
     fontFamily: ['"Poppins"', 'sans-serif'].join(',')
    }
+   
    
 });
 

@@ -17,7 +17,7 @@ import {
 import TemaFormu from "../../Temas/TemaFormu";
 import PasoUnoDiagnosticos from "./PasoUnoDiagnosticos";
 import PasoDosRepuestos from "./PasoDosRepuestos";
-import PasoTresFacturacion from './PasoTresFacturacion';
+import PasoTresFacturacion from "./PasoTresFacturacion";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,6 +37,8 @@ const PasosLegalizar = (props) => {
   const [paso, setPaso] = useState(0);
   const [titulo, setTitulo] = useState("");
   const [diagnosticoLocal, setDiagnosticoLocal] = useState();
+  const [fac, setFac] = useState("");
+  const [numFac, setNumFac] = useState("");
 
   const classes = useStyles();
 
@@ -72,7 +74,17 @@ const PasosLegalizar = (props) => {
           />
         );
       case 2:
-        return <PasoTresFacturacion diagnosticoLocal={diagnosticoLocal} tiket={tiket} />;
+        return (
+          <PasoTresFacturacion
+            diagnosticoLocal={diagnosticoLocal}
+            tiket={tiket}
+            retroceder={retroceder}
+            setFac={setFac}
+            setNumFac={setNumFac}
+            fac={fac}
+            numFac={numFac}
+          />
+        );
     }
   };
 

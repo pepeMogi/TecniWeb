@@ -14,6 +14,7 @@ import TiketDetalle from './../Tiket/TiketDetalle';
 import IconTipo from './IconosTiket/iconTipo';
 import IconTecnico from "./IconosTiket/iconTecnico";
 import PasosLegalizar from "../SeccionLegalizar/LegalizarForm/PasosLegalizar";
+import TiketDetalleCompleto from './TiketsDetalle/TiketDetalleCompleto';
 
 
 const TiketLegalizar = (props) => {
@@ -204,7 +205,7 @@ const TiketLegalizar = (props) => {
             open={openDetalle}
             onClose={cerrarDetalle}
           >
-            <TiketDetalle tiketDetalle={tiket} />
+            <TiketDetalleCompleto tiket={tiket} />
           </Dialog>
         </ThemeProvider>
 

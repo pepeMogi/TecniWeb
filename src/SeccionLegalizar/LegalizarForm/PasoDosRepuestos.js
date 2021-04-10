@@ -5,6 +5,12 @@ import {
   Typography,
   Box,
   Checkbox,
+  TableRow,
+  TableCell,
+  TableContainer,
+  Table,
+  TableBody,
+  TableHead,
 } from "@material-ui/core";
 import { React, useEffect, useState } from "react";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
@@ -12,7 +18,7 @@ import TemaFormu from "./../../Temas/TemaFormu";
 import { Completo } from "./../../Componentes/NavegaFormu";
 
 const PasoDosRepuestos = (props) => {
-  const { avanzar, retroceder, diagnosticoLocal } = props;  
+  const { avanzar, retroceder, diagnosticoLocal } = props;
   const [repFacturar, setRepFacturar] = useState([]);
   const [repCotizacion, setRepCotizacion] = useState([]);
   const [repGarantia, setRepGarantia] = useState([]);
@@ -46,115 +52,104 @@ const PasoDosRepuestos = (props) => {
   const llenarFacturar = () => {
     return (
       <div>
-        <Box sx={{ borderRadius: 1, boxShadow: 2, padding: 1.5, width: 500, marginBottom: 2 }}>
-          <Typography
-            sx={{
-              fontSize: 13,
-              fontStyle: "italic",
-              fontWeight: 500,
-              color: "#EC1B3B",
-              marginBottom: 1,
-            }}
-          >
-            Para facturar
-          </Typography>
-
-          {repFacturar.map((rep) => {
-            return (
-              <Grid
-                container
-                direction="row"
-                justify="space-between"
-                alignItems="center"
-                sx={{ marginTop: -2 }}
-              >
-                <Typography sx={{ width: 430, fontSize: 14, fontWeight: 500 }}>
-                  {rep.substring(3)}
-                </Typography>
-                <Checkbox />
-              </Grid>
-            );
-          })}
-        </Box>
+        <TableContainer component={Paper} >
+          <Table size="small" aria-label="a dense table"  >
+            <TableHead>
+              <TableRow sx={{backgroundColor: "#C8C8C8"}} >
+                <TableCell>Siigo</TableCell>
+                <TableCell align="left">Cant.</TableCell>
+                <TableCell align="left">Nombre</TableCell>
+                <TableCell align="right">Valor</TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {repFacturar.map((row) => (
+                <TableRow key={row.referencia}>
+                  <TableCell component="th" scope="row">
+                    {row.referencia}
+                  </TableCell>
+                  <TableCell align="left"> {row.cantidad}</TableCell>
+                  <TableCell align="left"> {row.nombre}</TableCell>
+                  <TableCell align="right"> {row.valor}</TableCell>
+                  <TableCell align="right"> <Checkbox sx={{margin: -0.8}} /> </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
-    );
+  
+  );
   };
-
 
   const llenarGarantia = () => {
     return (
       <div>
-        <Box sx={{ borderRadius: 1, boxShadow: 2, padding: 1.5, width: 500, marginBottom: 2 }}>
-          <Typography
-            sx={{
-              fontSize: 13,
-              fontStyle: "italic",
-              fontWeight: 500,
-              color: "#EC1B3B",
-              marginBottom: 1,
-            }}
-          >
-            Por garantia
-          </Typography>
-
-          {repGarantia.map((rep) => {
-            return (
-              <Grid
-                container
-                direction="row"
-                justify="space-between"
-                alignItems="center"
-                sx={{ marginTop: -2 }}
-              >
-                <Typography sx={{ width: 430, fontSize: 14, fontWeight: 500 }}>
-                  {rep.substring(3)}
-                </Typography>
-                <Checkbox />
-              </Grid>
-            );
-          })}
-        </Box>
+        <TableContainer component={Paper} >
+          <Table size="small" aria-label="a dense table"  >
+            <TableHead>
+              <TableRow sx={{backgroundColor: "#C8C8C8"}} >
+                <TableCell>Siigo</TableCell>
+                <TableCell align="left">Cant.</TableCell>
+                <TableCell align="left">Nombre</TableCell>
+                <TableCell align="right">Valor</TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {repGarantia.map((row) => (
+                <TableRow key={row.referencia}>
+                  <TableCell component="th" scope="row">
+                    {row.referencia}
+                  </TableCell>
+                  <TableCell align="left"> {row.cantidad}</TableCell>
+                  <TableCell align="left"> {row.nombre}</TableCell>
+                  <TableCell align="right"> {row.valor}</TableCell>
+                  <TableCell align="right"> <Checkbox sx={{margin: -0.8}} /> </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
-    );
+  
+   );
   };
 
   const llenarCotizacion = () => {
     return (
       <div>
-        <Box sx={{ borderRadius: 1, boxShadow: 2, padding: 1.5, width: 500, marginBottom: 2 }}>
-          <Typography
-            sx={{
-              fontSize: 13,
-              fontStyle: "italic",
-              fontWeight: 500,
-              color: "#EC1B3B",
-              marginBottom: 1,
-            }}
-          >
-            Por cotizacion
-          </Typography>
+      <TableContainer component={Paper} >
+        <Table size="small" aria-label="a dense table"  >
+          <TableHead>
+            <TableRow sx={{backgroundColor: "#C8C8C8"}} >
+              <TableCell>Siigo</TableCell>
+              <TableCell align="left">Cant.</TableCell>
+              <TableCell align="left">Nombre</TableCell>
+              <TableCell align="right">Valor</TableCell>
+              <TableCell align="right"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {repCotizacion.map((row) => (
+              <TableRow key={row.referencia}>
+                <TableCell component="th" scope="row">
+                  {row.referencia}
+                </TableCell>
+                <TableCell align="left"> {row.cantidad}</TableCell>
+                <TableCell align="left"> {row.nombre}</TableCell>
+                <TableCell align="right"> {row.valor}</TableCell>
+                <TableCell align="right"> <Checkbox sx={{margin: -0.8}} /> </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
 
-          {repCotizacion.map((rep) => {
-            return (
-              <Grid
-                container
-                direction="row"
-                justify="space-between"
-                alignItems="center"
-                sx={{ marginTop: 0.8 }}
-              >
-                <Typography sx={{ width: 430, fontSize: 14, fontWeight: 500 }}>
-                  {rep.substring(3)}
-                </Typography>                
-              </Grid>
-            );
-          })}
-        </Box>
-      </div>
-    );
+   );
   };
-
-
 
   useEffect(() => {
     var facurar = [];
@@ -163,11 +158,11 @@ const PasoDosRepuestos = (props) => {
 
     diagnosticoLocal.repuestos.forEach((elm) => {
       console.log("ordenando");
-      if (elm.substring(0, 3) === "Fac") {
+      if (elm.tipo === "facturable") {
         facurar.push(elm);
-      } else if (elm.substring(0, 3) === "Cot") {
+      } else if (elm.tipo === "cotizacion") {
         cotizacion.push(elm);
-      } else if (elm.substring(0, 3) === "Gar") {
+      } else if (elm.tipo === "garantia") {
         garantia.push(elm);
       }
     });
@@ -194,17 +189,15 @@ const PasoDosRepuestos = (props) => {
               container
               direction="column"
               justify="flex-start"
-              alignItems="flex-start"
+              alignItems="center"
             >
               {/***Contenido de Formulario****/}
 
               {repFacturar.length > 0 ? llenarFacturar() : ""}
 
               {repGarantia.length > 0 ? llenarGarantia() : ""}
-           
 
               {repCotizacion.length > 0 ? llenarCotizacion() : ""}
-             
             </Grid>
           </Paper>
 

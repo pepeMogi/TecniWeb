@@ -1,6 +1,7 @@
 import {
   Grid,
-  Button,
+  Fade,
+  CircularProgress,
   Paper,
   Typography,
   Box,
@@ -47,10 +48,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PasoTresFacturacion = (props) => {
-  const { retroceder, diagnosticoLocal, tiket } = props;
+  const { retroceder, diagnosticoLocal, tiket, numFac, setNumFac, fac,  setFac } = props;
   const hiddenFileInput = createRef(null);
-  const [fac, setFac] = useState("");
-  const [numFac, setNumFac] = useState("");
+
+  const [progFin, setProgFin] = useState(false);
 
   const atras = () => {
     retroceder();
@@ -73,7 +74,8 @@ const PasoTresFacturacion = (props) => {
         legalizacion: new Date(),
         estado: "finalizado",
         facturas: firebase.firestore.FieldValue.arrayUnion(numFac),
-        prioridad: 0
+        prioridad: 0,
+    
       })
       .then((doc) => {
         console.log("actualizado correctamenre");
@@ -143,7 +145,7 @@ const PasoTresFacturacion = (props) => {
     const file = e.target.files[0];
 
     if (file) {
-      // setProg(true);
+      setProgFin(true);
       const fileType = file["type"];
       const validImageTypes = ["image/jpeg", "image/png"];
       if (validImageTypes.includes(fileType)) {
@@ -183,7 +185,7 @@ const PasoTresFacturacion = (props) => {
           // complete function ....
           fire
             .storage()
-            .ref("images")
+            .ref("facturas")
             .child(image.name) // Upload the file and metadata
             .getDownloadURL() // get download url
             .then((url) => {
@@ -191,7 +193,7 @@ const PasoTresFacturacion = (props) => {
               setFac(url);
               // anexos.push(url);
               // setProgress(0);
-              // setProg(false);
+              setProgFin(false);
             });
         }
       );
@@ -236,6 +238,18 @@ const PasoTresFacturacion = (props) => {
               <Box className={classes.caja} sx={{ marginTop: 2 }}>
                 <img src={fac} className={classes.img} />
               </Box>
+              
+          <Fade
+            in={progFin}
+            style={{
+              transitionDelay: "800ms",
+              position: "absolute",
+            }}
+            unmountOnExit
+            sx={{ marginLeft: 30, marginTop: 1 }}
+          >
+            <CircularProgress size={20} />
+          </Fade>
 
               <Link
                 underline="always"

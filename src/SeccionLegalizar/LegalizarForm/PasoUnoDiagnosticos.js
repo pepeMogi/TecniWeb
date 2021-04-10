@@ -5,7 +5,7 @@ import {
 import { React, useEffect, useState } from "react";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import TemaFormu from "./../../Temas/TemaFormu";
-import { Completo } from "./../../Componentes/NavegaFormu";
+import { Completo, Isquierdo } from "./../../Componentes/NavegaFormu";
 import fire from "./../../fire";
 import { diagnostico } from "../../Entidades/diagnostico";
 import DiagnosticoCard from "../../Componentes/DiagnosticoCard";
@@ -84,7 +84,7 @@ const PasoUnoDiagnosticos = (props) => {
             })}
           </Paper>
 
-          <Completo siguiente={siguiente} atras={atras} />
+          <Isquierdo siguiente={siguiente} atras={atras} />
         </Grid>
       </ThemeProvider>
     </div>

@@ -13,6 +13,7 @@ import PasosGestion from './../SeccionTiketes/GestionTiket/PasosGestion';
 import TablaHistorialTiketCompo from './TablaHistorialTiketCompo';
 
 import TiketDetalle from './../Tiket/TiketDetalle';
+import TiketDetalleCompleto from './TiketsDetalle/TiketDetalleCompleto';
 
 const TiketNuevoCompo = (props) => {
   const { tiket } = props;
@@ -206,7 +207,7 @@ const TiketNuevoCompo = (props) => {
             open={openDetalle}
             onClose={cerrarDetalle}
           >
-            <TiketDetalle tiketDetalle={tiket} />
+            <TiketDetalleCompleto tiket={tiket} />
           </Dialog>
         </ThemeProvider>
 

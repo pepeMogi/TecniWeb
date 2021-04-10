@@ -1,6 +1,5 @@
 import {
   Grid,
-  Button,
   Box,
   Typography,
   TextField,
@@ -47,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PasoCuatroMaquina = (props) => {
-  const { avanzar, retroceder, idMaquina, maquina, setMaquina, setActMaquina } = props;
+  const { avanzar, retroceder, idMaquina, maquina, setMaquina, setContaBn, setContaColor } = props;
   const [maquinaP, setMaquinaP] = useState("");
   const [conBn,setConBn] = useState("");
   const [conColor,setConColor] = useState("");
@@ -58,13 +57,6 @@ const PasoCuatroMaquina = (props) => {
     nom = maquinaP.id;
   }
 
- 
-
-
-  // subir reporte en firestore
-  // actualizar tiket (estado, nit, fecha de ultima visita, idreporte, prioridad)
-  // actializar tiket algolia ( nit, estado, prioridad)
-  
 
 
   const classes = useStyles();
@@ -72,19 +64,21 @@ const PasoCuatroMaquina = (props) => {
 
   const cambioBn = (e) =>{
     setConBn(e);
+    setContaBn(e);
     setActConta(true);
   }
 
   const cambioColor = (e) =>{
     setConColor(e);
+    setContaColor(e);
     setActConta(true);
   }
 
   const siguiente = () =>{
     if(actConta){
       fire.firestore().collection("maquinas").doc(maquinaP.id).update({
-        contadorBN: conBn,
-        contadorColor: conColor,
+        contadorBN: parseInt(conBn),
+        contadorColor: parseInt(conColor),
       }).then(() =>{
         console.log("actualizado Correctamente");
       })
