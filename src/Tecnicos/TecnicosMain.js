@@ -21,6 +21,7 @@ import fire from "../fire";
 import TemaDialog from "../Temas/TemaDialog";
 import EditTecnico from "./EditTecnico";
 import CrearTecncio from "../CrearTecnico/PasosCT";
+import { tecnico } from "../Entidades/tecnico";
 
 const TecnicosMain = () => {
   const [tecnicos, setTecnicos] = useState([]);
@@ -84,12 +85,12 @@ const TecnicosMain = () => {
                         fontSize: 15,
                         fontWeight: 600,
                         color: "#EC1B3B",
-                        width: 120,
+                     
                         height: 24,
                         overflow: "hidden",
                       }}
                     >
-                      {tecni.nombre}
+                      {tecni.alias}
                       <Divider sx={{ borderColor: "#EC1B3B" }} />
                     </Typography>
 
@@ -110,7 +111,7 @@ const TecnicosMain = () => {
                             color: "#EC1B3B",
                             marginLeft: 1,
                             marginRight: 2,
-                            width: 40, /// aqui
+                            width: 60, /// aqui
                           }}
                         >
                           {tecni.tipo}
@@ -314,31 +315,16 @@ const TecnicosMain = () => {
     fire
       .firestore()
       .collection("tecnicos")
-      .get()
-      .then((snap) => {
-        snap.forEach((tecni) => {
-          var tecnico = {
-            bodega: tecni.data().bodega,
-            celular: tecni.data().celular,
-            email: tecni.data().email,
-            id: tecni.data().id,
-            img: tecni.data().img,
-            nombre: tecni.data().nombre,
-            tipo: tecni.data().tipo,
-            cc: tecni.data().cc,
-            rh: tecni.data().rh,
-          };
-
-          array.push(tecnico);
+      .onSnapshot((snap) => {
+        snap.forEach((doc) => {
+          var tec = new tecnico(doc);
+          setTecnicos((array) => array.concat(tec));
         });
 
-        setTecnicos(array);
         setOpen(true);
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  });
+      ;
+  },[]);
   return (
     <div>
       <Grid
@@ -356,11 +342,8 @@ const TecnicosMain = () => {
         >
           <Box
             sx={{
-              backgroundColor: "#3D3D3D",
-              height: 50,
-              width: 230,
-              borderRadius: 3,
-              boxShadow: 5,
+              backgroundColor: "#3D3D3D",             
+              borderRadius: 1,            
               padding: 0.7,
             }}
           >
@@ -371,17 +354,18 @@ const TecnicosMain = () => {
               alignItems="center"
               sx={{ marginLeft: 1 }}
             >
-              <IconTecnico />{" "}
+              <IconTecnico />
               <Typography
                 sx={{
                   color: "#ffffff",
                   fontWeight: 500,
                   alignSelf: "center",
                   marginLeft: 1,
-                  marginTop: -0.5,
+                  marginTop: -0.2,
+                  marginRight: 1
                 }}
               >
-                {" "}
+             
                 12 Tecnicos Activos
               </Typography>
             </Grid>

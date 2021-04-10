@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: 0,
+    marginTop: 2,
   },
 }));
 
@@ -13,8 +13,8 @@ const IconAdmin = () => {
     <div className={classes.root}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="41.432"
-        height="37.667"
+        width="31.432"
+        height="27.667"
         viewBox="0 0 21.432 17.667"
       >
         <g id="icedttecnico" transform="translate(-593.465 -53.116)">
